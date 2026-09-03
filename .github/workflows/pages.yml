@@ -6,7 +6,7 @@ on:
     paths:
       - "site/**"
       - "scripts/check_public_site.py"
-      - "ygo_bench/visualization/public_site.py"
+      - "ygo_bench/visualization/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 

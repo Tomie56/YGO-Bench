@@ -1,0 +1,379 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ygo-bench.org/schemas/understanding-annotation.schema.json",
+  "title": "YGO-Bench Understanding annotation record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_id",
+    "snapshot_id",
+    "task",
+    "status",
+    "input",
+    "evidence",
+    "annotations",
+    "gold",
+    "adjudication"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "record_id": {"$ref": "#/$defs/id"},
+    "group_id": {"$ref": "#/$defs/id"},
+    "snapshot_id": {"$ref": "#/$defs/id"},
+    "task": {"enum": ["CardSemantics", "RuleAndTiming"]},
+    "candidate_kind": {
+      "enum": ["card_semantics", "rule_and_timing", "counterfactual"]
+    },
+    "status": {"enum": ["candidate", "double_annotated", "adjudicated"]},
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["question", "card_ids", "card_text", "rule_context"],
+      "properties": {
+        "question": {"type": "string", "minLength": 1},
+        "card_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "integer", "minimum": 1}
+        },
+        "card_text": {"type": "string", "minLength": 1},
+        "rule_context": {"type": "string", "minLength": 1}
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/evidence"}
+    },
+    "annotations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/annotation"}
+    },
+    "gold": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/semantic_value"}
+      ]
+    },
+    "adjudication": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/adjudication"}
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "candidate"}}},
+      "then": {
+        "properties": {
+          "gold": {"type": "null"},
+          "adjudication": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"status": {"const": "double_annotated"}}},
+      "then": {
+        "properties": {
+          "annotations": {"minItems": 2},
+          "gold": {"type": "null"},
+          "adjudication": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"status": {"const": "adjudicated"}}},
+      "then": {
+        "properties": {
+          "annotations": {"minItems": 2},
+          "gold": {"$ref": "#/$defs/semantic_value"},
+          "adjudication": {"$ref": "#/$defs/adjudication"}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "uri",
+        "retrieved_at",
+        "sha256",
+        "evidence_level"
+      ],
+      "properties": {
+        "source_id": {"$ref": "#/$defs/id"},
+        "uri": {"type": "string", "minLength": 1},
+        "retrieved_at": {"type": "string", "format": "date-time"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "evidence_level": {
+          "enum": [
+            "official_card_text",
+            "official_rule",
+            "cardscript_candidate",
+            "expert_annotation"
+          ]
+        }
+      }
+    },
+    "annotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "annotator_id",
+        "submitted_at",
+        "independent",
+        "value",
+        "rationale",
+        "evidence_source_ids"
+      ],
+      "properties": {
+        "annotator_id": {"$ref": "#/$defs/id"},
+        "submitted_at": {"type": "string", "format": "date-time"},
+        "independent": {"const": true},
+        "value": {"$ref": "#/$defs/semantic_value"},
+        "rationale": {"type": "string", "minLength": 1},
+        "evidence_source_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/id"}
+        }
+      }
+    },
+    "field_status": {
+      "enum": ["present", "absent", "not_applicable"]
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "labels", "source_spans"],
+      "properties": {
+        "status": {"$ref": "#/$defs/field_status"},
+        "labels": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "state_requirement",
+              "event_requirement",
+              "location_requirement",
+              "timing_requirement",
+              "phase_requirement",
+              "turn_player_requirement",
+              "mandatory",
+              "optional",
+              "other"
+            ]
+          }
+        },
+        "source_spans": {"$ref": "#/$defs/source_spans"}
+      }
+    },
+    "cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "labels", "source_spans"],
+      "properties": {
+        "status": {"$ref": "#/$defs/field_status"},
+        "labels": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "lp_payment",
+              "discard",
+              "tribute",
+              "release",
+              "banish",
+              "send_to_graveyard",
+              "detach_material",
+              "reveal",
+              "return_to_deck",
+              "other"
+            ]
+          }
+        },
+        "source_spans": {"$ref": "#/$defs/source_spans"}
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "labels", "source_spans"],
+      "properties": {
+        "status": {"$ref": "#/$defs/field_status"},
+        "labels": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "explicitly_targets_card",
+              "explicitly_targets_player",
+              "explicitly_targets_zone",
+              "selects_without_targeting",
+              "selects_at_resolution",
+              "other"
+            ]
+          }
+        },
+        "source_spans": {"$ref": "#/$defs/source_spans"}
+      }
+    },
+    "once_per_turn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "scope", "labels", "source_spans"],
+      "properties": {
+        "status": {"$ref": "#/$defs/field_status"},
+        "scope": {
+          "enum": [
+            "none",
+            "soft_card_copy",
+            "hard_card_name",
+            "effect_instance",
+            "duel",
+            "other"
+          ]
+        },
+        "labels": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "activation_limit",
+              "use_limit",
+              "summon_limit",
+              "shared_name_limit",
+              "other"
+            ]
+          }
+        },
+        "source_spans": {"$ref": "#/$defs/source_spans"}
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "labels", "source_spans"],
+      "properties": {
+        "status": {"$ref": "#/$defs/field_status"},
+        "labels": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "draw",
+              "search",
+              "add_to_hand",
+              "special_summon",
+              "normal_summon",
+              "destroy",
+              "banish",
+              "negate",
+              "send_to_graveyard",
+              "modify_stats",
+              "set_card",
+              "shuffle",
+              "return_to_hand",
+              "return_to_deck",
+              "change_control",
+              "other"
+            ]
+          }
+        },
+        "source_spans": {"$ref": "#/$defs/source_spans"}
+      }
+    },
+    "restriction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "labels", "source_spans"],
+      "properties": {
+        "status": {"$ref": "#/$defs/field_status"},
+        "labels": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "activation_lock",
+              "summon_lock",
+              "attack_lock",
+              "extra_deck_lock",
+              "material_restriction",
+              "zone_restriction",
+              "lingering_restriction",
+              "other"
+            ]
+          }
+        },
+        "source_spans": {"$ref": "#/$defs/source_spans"}
+      }
+    },
+    "source_spans": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "semantic_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "activation_condition",
+        "cost",
+        "target",
+        "once_per_turn_scope",
+        "resolution_operation",
+        "restriction"
+      ],
+      "properties": {
+        "activation_condition": {"$ref": "#/$defs/condition"},
+        "cost": {"$ref": "#/$defs/cost"},
+        "target": {"$ref": "#/$defs/target"},
+        "once_per_turn_scope": {"$ref": "#/$defs/once_per_turn"},
+        "resolution_operation": {"$ref": "#/$defs/operation"},
+        "restriction": {"$ref": "#/$defs/restriction"}
+      }
+    },
+    "adjudication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adjudicator_id",
+        "submitted_at",
+        "rationale",
+        "disputed_fields"
+      ],
+      "properties": {
+        "adjudicator_id": {"$ref": "#/$defs/id"},
+        "submitted_at": {"type": "string", "format": "date-time"},
+        "rationale": {"type": "string", "minLength": 1},
+        "disputed_fields": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "activation_condition",
+              "cost",
+              "target",
+              "once_per_turn_scope",
+              "resolution_operation",
+              "restriction"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

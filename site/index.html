@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="YGO-Bench：面向大语言模型与智能体的游戏王理解、构筑和策略评测。" />
+  <title>YGO-Bench</title>
+  <link rel="stylesheet" href="assets/site.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./">YGO-Bench</a>
+    <nav aria-label="主导航">
+      <a href="#benchmark">Benchmark</a>
+      <a href="#status">进度</a>
+      <a href="review/">互动审阅</a>
+      <a href="https://github.com/Tomie56/YGO-Bench">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p>LLM · AGENT · YU-GI-OH!</p>
+        <h1>YGO-Bench</h1>
+        <p class="lead">LLM/Agent 能否成为优秀的游戏王玩家？我们从卡牌与规则理解、构筑和策略对局三个相连层次进行测量。</p>
+        <div class="hero-actions">
+          <a class="primary" href="review/">进入互动审阅</a>
+          <a href="https://github.com/Tomie56/YGO-Bench">查看代码</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="overview" id="benchmark">
+      <div class="section-heading">
+        <p>BENCHMARK DESIGN</p>
+        <h2>一个问题，三层测量</h2>
+      </div>
+      <div class="tracks">
+        <article><span>01</span><h3>理解</h3><p>卡牌条件、cost、target、OPT、限制、连锁和效果结算，并用规则证据或引擎状态核验。</p></article>
+        <article><span>02</span><h3>构筑</h3><p>冻结 TCG/OCG 卡池与禁限表，测试合法性、错误定位、最小修复、补全和环境迁移。</p></article>
+        <article><span>03</span><h3>策略</h3><p>局部合法动作、响应时点、长组合、打断恢复、隐藏信息、资源管理和完整对局。</p></article>
+      </div>
+    </section>
+
+    <section class="status-band" id="status">
+      <div class="section-heading">
+        <p>CURRENT SNAPSHOT</p>
+        <h2>当前可审阅资产</h2>
+      </div>
+      <dl>
+        <div><dt>30</dt><dd>理解候选题</dd></div>
+        <div><dt>60</dt><dd>构筑任务</dd></div>
+        <div><dt>66</dt><dd>残局首筛题</dd></div>
+        <div><dt>20</dt><dd>TCG/OCG 赛事牌组</dd></div>
+      </dl>
+      <p>候选题不等于专家 Gold。公开审阅结果用于筛选和修订；正式答案需要独立双标与裁决。</p>
+    </section>
+
+    <section class="workflow">
+      <div class="preview"><img src="assets/benchmark-preview.png" alt="YGO-Bench 策略残局审阅界面示例" /></div>
+      <div class="workflow-copy">
+        <p class="eyebrow">REPRODUCIBLE REVIEW</p>
+        <h2>题面可看，来源可查，结论可导出</h2>
+        <p>审阅器展示冻结环境、来源、资产问题和引擎资格状态。公开版本的标注保存在当前浏览器中，可导入或导出版本化 JSONL，不会直接改写 canonical Gold。</p>
+        <a href="review/">开始审阅</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <strong>YGO-Bench</strong>
+    <span>Independent research preview · Third-party Yu-Gi-Oh! assets are not licensed under Apache-2.0.</span>
+    <span><a href="https://github.com/Tomie56/YGO-Bench/blob/main/LICENSE">License</a> · <a href="https://github.com/Tomie56/YGO-Bench/blob/main/NOTICE">Notice</a> · <a href="https://github.com/Tomie56/YGO-Bench/blob/main/references/SOURCES.md">Sources</a></span>
+  </footer>
+</body>
+</html>

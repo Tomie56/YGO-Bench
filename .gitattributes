@@ -1,0 +1,16 @@
+* text=auto eol=lf
+
+*.cdb binary
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.npz binary
+*.yrp binary
+*.so binary
+*.dll binary
+*.wsl binary
+
+# Preserve downloaded source pages byte-for-byte for provenance audits.
+data/source_samples/**/*.html binary

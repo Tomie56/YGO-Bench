@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ygo-bench.org/schemas/benchmark-record.schema.json",
+  "title": "YGO-Bench benchmark record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_id",
+    "group_id",
+    "layer",
+    "task",
+    "snapshot_id",
+    "split",
+    "input",
+    "target",
+    "provenance",
+    "verifier",
+    "visibility"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "record_id": {"$ref": "#/$defs/id"},
+    "group_id": {"$ref": "#/$defs/id"},
+    "layer": {"enum": ["understanding", "deck", "strategy"]},
+    "task": {
+      "enum": [
+        "CardSemantics",
+        "RuleAndTiming",
+        "CardPoolGrounding",
+        "LegalSet",
+        "ResolveDelta",
+        "CounterfactualRule",
+        "LegalityAudit",
+        "MinimalRepair",
+        "MaskedCompletion",
+        "CrossRegulationMigration",
+        "SideAdapt",
+        "ChainTiming",
+        "InterruptionRecovery",
+        "ResourceTracking",
+        "FullDuel"
+      ]
+    },
+    "snapshot_id": {"$ref": "#/$defs/id"},
+    "split": {
+      "enum": [
+        "train",
+        "dev",
+        "test_iid",
+        "test_composition_ood",
+        "test_temporal",
+        "test_name_masked",
+        "test_private"
+      ]
+    },
+    "task_type": {"type": "string", "minLength": 1},
+    "input": {"type": "object"},
+    "target": {"type": "object"},
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runtime_snapshot_id": {"$ref": "#/$defs/id"},
+        "player_deck_id": {"$ref": "#/$defs/id"},
+        "opponent_deck_id": {"$ref": "#/$defs/id"},
+        "engine_seed": {"type": "integer", "minimum": 0},
+        "deck_order_sha256": {"$ref": "#/$defs/sha256"},
+        "action_prefix_sha256": {"$ref": "#/$defs/sha256"},
+        "pre_state_sha256": {"$ref": "#/$defs/sha256"},
+        "post_state_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["created_at", "sources", "generator"],
+      "properties": {
+        "created_at": {"type": "string", "format": "date-time"},
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/source"}
+        },
+        "generator": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "version", "config_sha256"],
+          "properties": {
+            "name": {"type": "string", "minLength": 1},
+            "version": {"type": "string", "minLength": 1},
+            "config_sha256": {"$ref": "#/$defs/sha256"}
+          }
+        }
+      }
+    },
+    "verifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "name", "version", "gold_level", "config"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "engine",
+            "official_rule",
+            "human_consensus",
+            "snapshot_validator",
+            "paired_rollout",
+            "expert_review",
+            "composite"
+          ]
+        },
+        "name": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "gold_level": {"enum": ["G1", "G2", "G3", "G4"]},
+        "config": {"type": "object"}
+      }
+    },
+    "visibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["public_fields", "private_fields"],
+      "properties": {
+        "public_fields": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "private_fields": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "difficulty": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "decision_horizon": {"type": "integer", "minimum": 1},
+        "legal_action_count": {"type": "integer", "minimum": 0},
+        "chain_depth": {"type": "integer", "minimum": 0},
+        "hidden_information": {"type": "boolean"},
+        "interruption_count": {"type": "integer", "minimum": 0},
+        "changed_variables": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "contamination_controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "card_names_masked": {"type": "boolean"},
+        "private_generator_seed": {"type": "boolean"},
+        "release_cutoff": {"type": ["string", "null"], "format": "date"},
+        "held_out_card_pairs": {"type": "boolean"}
+      }
+    },
+    "metadata": {"type": "object"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"layer": {"const": "understanding"}}},
+      "then": {
+        "properties": {
+          "task": {
+            "enum": [
+              "CardSemantics",
+              "RuleAndTiming",
+              "CardPoolGrounding",
+              "LegalSet",
+              "ResolveDelta",
+              "CounterfactualRule"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"layer": {"const": "deck"}}},
+      "then": {
+        "properties": {
+          "task": {
+            "enum": [
+              "LegalityAudit",
+              "MinimalRepair",
+              "MaskedCompletion",
+              "CrossRegulationMigration",
+              "SideAdapt"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"layer": {"const": "strategy"}}},
+      "then": {
+        "properties": {
+          "task": {
+            "enum": [
+              "ChainTiming",
+              "InterruptionRecovery",
+              "ResourceTracking",
+              "FullDuel"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "uri", "retrieved_at", "sha256", "evidence_level"],
+      "properties": {
+        "source_id": {"$ref": "#/$defs/id"},
+        "uri": {"type": "string", "minLength": 1},
+        "retrieved_at": {"type": "string", "format": "date-time"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "evidence_level": {"type": "string", "minLength": 1},
+        "source_type": {
+          "enum": [
+            "official_card_text",
+            "official_event",
+            "engine_generated",
+            "curated_tournament_deck",
+            "user_published_deck",
+            "editorial_aggregate",
+            "expert_annotation"
+          ]
+        },
+        "parser_version": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

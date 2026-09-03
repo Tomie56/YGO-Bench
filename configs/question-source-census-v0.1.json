@@ -1,0 +1,60 @@
+{
+  "source_set_id": "question-source-census-v0.1",
+  "output_root": "data/question_sources/raw",
+  "sources": [
+    {
+      "source_id": "ocg-rule-documentation",
+      "repository": "lucays/OCG-Rule-documentation",
+      "revision": "dda800b443e126d6a1047b98b51a7f63b2d98ebb",
+      "include_prefixes": [
+        "docs/c05/",
+        "docs/.static/c05/"
+      ],
+      "include_paths": [
+        "readme.md"
+      ]
+    },
+    {
+      "source_id": "ocg-rulebook",
+      "repository": "lucays/ocg-rulebook",
+      "revision": "7c00fa56babf7a494df3c43cc7789ca8a2e4ea0b",
+      "include_prefixes": [],
+      "include_paths": [
+        "README.md",
+        "docs/c03/游戏王OCG检定测试模拟试验.rst"
+      ]
+    },
+    {
+      "source_id": "ocg-ruling-assistant",
+      "repository": "coldiceh/ocg-ruling-assistant",
+      "revision": "e338ac59ef154e7d6ffa47fa997ecbfa00c6e980",
+      "include_prefixes": [],
+      "include_paths": [
+        "LICENSE",
+        "README.md",
+        "data/ocg-rule-tests.json",
+        "data/ocg-rule-corpus.json",
+        "data/rag-runtime-v1/manifest.json",
+        "data/rag-runtime-v1/qa-records.json.br",
+        "data/test/five-state-transition-regressions.json",
+        "data/test/real-ruling-goldens.json",
+        "data/test/reported-user-regressions.json",
+        "data/test/twitter-ruling-questions.json"
+      ]
+    },
+    {
+      "source_id": "external-ygo-bench",
+      "repository": "erwinmsmith/YGO-Bench",
+      "revision": "f01401115b678e6f16fcc268a1e62ea5062d46ce",
+      "include_prefixes": [],
+      "include_paths": [
+        ".gitmodules",
+        "LICENSE",
+        "NOTICE",
+        "README.md",
+        "README.zh-CN.md",
+        "docs/BENCHMARK_PROTOCOL.md"
+      ]
+    }
+  ]
+}

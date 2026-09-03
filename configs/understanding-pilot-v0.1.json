@@ -1,0 +1,325 @@
+{
+  "pilot_id": "understanding-pilot-v0.1",
+  "schema_version": "0.1.0",
+  "cards": [
+    {"card_id": 14558127, "konami_cid": 12950, "name": "Ash Blossom & Joyous Spring"},
+    {"card_id": 24224830, "konami_cid": 13619, "name": "Called by the Grave"},
+    {"card_id": 10045474, "konami_cid": 13631, "name": "Infinite Impermanence"},
+    {"card_id": 97268402, "konami_cid": 8933, "name": "Effect Veiler"},
+    {"card_id": 84211599, "konami_cid": 15756, "name": "Pot of Prosperity"},
+    {"card_id": 59438930, "konami_cid": 11708, "name": "Ghost Ogre & Snow Rabbit"},
+    {"card_id": 94145021, "konami_cid": 9279, "name": "Droll & Lock Bird"},
+    {"card_id": 73642296, "konami_cid": 13587, "name": "Ghost Belle & Haunted Mansion"},
+    {"card_id": 33854624, "konami_cid": 17762, "name": "Bystial Magnamhut"},
+    {"card_id": 65681983, "konami_cid": 14627, "name": "Crossout Designator"},
+    {"card_id": 25311006, "konami_cid": 15296, "name": "Triple Tactics Talent"},
+    {"card_id": 29301450, "konami_cid": 19188, "name": "S:P Little Knight"}
+  ],
+  "rule_sources": {
+    "rulebook": "data/source_samples/official_rules/tcg_rulebook_v9_01_en.pdf",
+    "fast_effect_timing": "data/source_samples/official_rules/fast_effect_timing_2026-08-26.html",
+    "psct": "data/source_samples/official_rules/psct_2026-08-26.html"
+  },
+  "candidates": [
+    {
+      "record_id": "u-cs-001-ash-semantics-tcg",
+      "group_id": "u-cs-001",
+      "snapshot_id": "tcg-kde-e-2026-05-18",
+      "task": "CardSemantics",
+      "candidate_kind": "card_semantics",
+      "card_ids": [14558127],
+      "question": "Classify this effect into activation condition, cost, target, once-per-turn scope, resolution operation, and restriction. In particular, decide whether discarding this card is a cost, whether the effect targets, and whether the once-per-turn clause is shared by all copies with this name.",
+      "rule_context": "Use the printed English TCG text and Problem-Solving Card Text conventions. Do not infer a target merely because another activated effect refers to cards."
+    },
+    {
+      "record_id": "u-cs-002-called-by-semantics-ocg",
+      "group_id": "u-cs-002",
+      "snapshot_id": "ocg-jp-2026-07-01",
+      "task": "CardSemantics",
+      "candidate_kind": "card_semantics",
+      "card_ids": [24224830],
+      "question": "Classify the activation condition, cost, target, once-per-turn scope, resolution operation, and restriction. Explain which operation depends on successfully banishing the target and how long the name-based negation lasts.",
+      "rule_context": "Use the official OCG English-Asia text. Treat text before the semicolon and conjunctions as semantically meaningful."
+    },
+    {
+      "record_id": "u-cs-003-imperm-semantics-tcg",
+      "group_id": "u-cs-003",
+      "snapshot_id": "tcg-kde-e-2026-05-18",
+      "task": "CardSemantics",
+      "candidate_kind": "card_semantics",
+      "card_ids": [10045474],
+      "question": "Separate this card's activation-from-hand condition from its at-resolution column condition. Then classify its target, cost, once-per-turn scope, resolution operation, and restrictions.",
+      "rule_context": "Use the official English TCG text. The hand-activation sentence and the column-negation sentence describe different conditions."
+    },
+    {
+      "record_id": "u-cs-004-veiler-semantics-ocg",
+      "group_id": "u-cs-004",
+      "snapshot_id": "ocg-jp-2026-07-01",
+      "task": "CardSemantics",
+      "candidate_kind": "card_semantics",
+      "card_ids": [97268402],
+      "question": "Classify the phase, turn-player and location requirements, the send-to-GY clause, the target, the negation duration, and any once-per-turn or lingering restriction.",
+      "rule_context": "Use the official OCG English-Asia text and distinguish an activation cost from the operation performed when the effect resolves."
+    },
+    {
+      "record_id": "u-cs-005-prosperity-semantics-tcg",
+      "group_id": "u-cs-005",
+      "snapshot_id": "tcg-kde-e-2026-05-18",
+      "task": "CardSemantics",
+      "candidate_kind": "card_semantics",
+      "card_ids": [84211599],
+      "question": "Classify the face-down Extra Deck banish, excavation and add-to-hand operation, damage modification, draw prohibition, and once-per-turn clause. State which clauses are paid or chosen at activation and which apply after resolution.",
+      "rule_context": "Use the official English TCG text and PSCT punctuation. Preserve the distinction between an activation limit and a use limit."
+    },
+    {
+      "record_id": "u-cs-006-ghost-ogre-semantics-ocg",
+      "group_id": "u-cs-006",
+      "snapshot_id": "ocg-jp-2026-07-01",
+      "task": "CardSemantics",
+      "candidate_kind": "card_semantics",
+      "card_ids": [59438930],
+      "question": "Classify both branches of the activation condition, the allowed source locations for sending this card, the target status, the operation performed at resolution, and the once-per-turn scope. Does the printed operation itself negate the activated effect?",
+      "rule_context": "Use the official OCG English-Asia text. Destruction and negation are separate operations unless the text states both."
+    },
+    {
+      "record_id": "u-cs-007-droll-semantics-tcg",
+      "group_id": "u-cs-007",
+      "snapshot_id": "tcg-kde-e-2026-05-18",
+      "task": "CardSemantics",
+      "candidate_kind": "card_semantics",
+      "card_ids": [94145021],
+      "question": "Classify the triggering event, the excluded phase, the send-to-GY clause, the target status, and the rest-of-turn restriction. Identify which player or players are affected by that restriction.",
+      "rule_context": "Use the official English TCG text. The triggering event and the restriction created after resolution are different semantic fields."
+    },
+    {
+      "record_id": "u-cs-008-ghost-belle-semantics-ocg",
+      "group_id": "u-cs-008",
+      "snapshot_id": "ocg-jp-2026-07-01",
+      "task": "CardSemantics",
+      "candidate_kind": "card_semantics",
+      "card_ids": [73642296],
+      "question": "Classify the activation condition, discard clause, target status, once-per-turn scope, and negation operation. Distinguish negating an activation from negating only an effect.",
+      "rule_context": "Use the official OCG English-Asia text. The three listed GY interactions define whether the response condition is satisfied."
+    },
+    {
+      "record_id": "u-cs-009-magnamhut-semantics-tcg",
+      "group_id": "u-cs-009",
+      "snapshot_id": "tcg-kde-e-2026-05-18",
+      "task": "CardSemantics",
+      "candidate_kind": "card_semantics",
+      "card_ids": [33854624],
+      "question": "Separate the summon effect from the delayed End Phase effect. For each, classify its condition, target, operations and once-per-turn scope, and explain what changes when the opponent controls a monster.",
+      "rule_context": "Use the official English TCG text. The Quick Effect sentence changes when the first effect may be activated; it does not create a third effect."
+    },
+    {
+      "record_id": "u-cs-010-crossout-semantics-ocg",
+      "group_id": "u-cs-010",
+      "snapshot_id": "ocg-jp-2026-07-01",
+      "task": "CardSemantics",
+      "candidate_kind": "card_semantics",
+      "card_ids": [65681983],
+      "question": "Classify the card-name declaration, Main Deck banish, target status, name-based negation and once-per-turn clause. Determine which parts occur at activation and which occur during resolution.",
+      "rule_context": "Use the official OCG English-Asia text and PSCT punctuation. Declaring a card name is not the same as targeting a card."
+    },
+    {
+      "record_id": "u-cs-011-ttt-semantics-tcg",
+      "group_id": "u-cs-011",
+      "snapshot_id": "tcg-kde-e-2026-05-18",
+      "task": "CardSemantics",
+      "candidate_kind": "card_semantics",
+      "card_ids": [25311006],
+      "question": "Classify the historical activation condition, the three selectable operations, their target or selection behavior, and the once-per-turn scope. Do not merge all three modes into one operation label.",
+      "rule_context": "Use the official English TCG text. The opponent's monster effect only needs to have been activated during the specified turn and phase."
+    },
+    {
+      "record_id": "u-cs-012-sp-semantics-ocg",
+      "group_id": "u-cs-012",
+      "snapshot_id": "ocg-jp-2026-07-01",
+      "task": "CardSemantics",
+      "candidate_kind": "card_semantics",
+      "card_ids": [29301450],
+      "question": "Annotate the two effects separately: their conditions, targets, banish operations, attack restriction, return timing and once-per-turn scope. State which restrictions belong only to the first effect.",
+      "rule_context": "Use the official OCG English-Asia text. 'Each effect' creates separate name-based use limits for the two effects."
+    },
+    {
+      "record_id": "u-rt-001-ash-called-chain-tcg",
+      "group_id": "u-rt-001",
+      "snapshot_id": "tcg-kde-e-2026-05-18",
+      "task": "RuleAndTiming",
+      "candidate_kind": "rule_and_timing",
+      "card_ids": [14558127, 24224830],
+      "question": "An opponent activates an effect that would add from the Deck. You chain Ash Blossom by discarding it as Chain Link 2. The opponent chains Called by the Grave as Chain Link 3, targeting that Ash Blossom in your GY. Resolve the Chain in order and state whether Ash Blossom negates Chain Link 1.",
+      "rule_context": "Assume every activation is otherwise legal and no additional cards or replacement effects apply. Use normal reverse Chain resolution."
+    },
+    {
+      "record_id": "u-rt-002-ghost-ogre-continuous-ocg",
+      "group_id": "u-rt-002",
+      "snapshot_id": "ocg-jp-2026-07-01",
+      "task": "RuleAndTiming",
+      "candidate_kind": "rule_and_timing",
+      "card_ids": [59438930],
+      "question": "A face-up Continuous Spell that was already on the field activates one of its effects. Ghost Ogre is chained and destroys that Spell. Does Ghost Ogre negate the activation, and under what rule can destruction of the Continuous Spell still affect whether its effect resolves successfully?",
+      "rule_context": "Assume the Continuous Spell normally needs to remain face-up on the field to apply its effect. Distinguish the text of Ghost Ogre from the general resolution rule for Continuous Spells."
+    },
+    {
+      "record_id": "u-rt-003-imperm-leaves-field-tcg",
+      "group_id": "u-rt-003",
+      "snapshot_id": "tcg-kde-e-2026-05-18",
+      "task": "RuleAndTiming",
+      "candidate_kind": "rule_and_timing",
+      "card_ids": [10045474],
+      "question": "Infinite Impermanence was Set before activation and targets a face-up monster. Another effect is chained that removes Infinite Impermanence from the field before it resolves. Which parts of Infinite Impermanence can still resolve, and is the rest-of-turn column negation applied?",
+      "rule_context": "Assume the target remains face-up and otherwise valid. Apply the explicit 'is on the field at resolution' condition only to the clause it governs."
+    },
+    {
+      "record_id": "u-rt-004-veiler-target-facedown-ocg",
+      "group_id": "u-rt-004",
+      "snapshot_id": "ocg-jp-2026-07-01",
+      "task": "RuleAndTiming",
+      "candidate_kind": "rule_and_timing",
+      "card_ids": [97268402],
+      "question": "During the opponent's Main Phase, Effect Veiler targets a face-up Effect Monster. A chained effect changes that target to face-down Defense Position before Effect Veiler resolves. Determine what Effect Veiler does on resolution and identify the relevant target-state requirement.",
+      "rule_context": "Assume the targeted card remains in the same Monster Zone and no other effects apply."
+    },
+    {
+      "record_id": "u-rt-005-magnamhut-trigger-window-tcg",
+      "group_id": "u-rt-005",
+      "snapshot_id": "tcg-kde-e-2026-05-18",
+      "task": "RuleAndTiming",
+      "candidate_kind": "rule_and_timing",
+      "card_ids": [33854624],
+      "question": "Bystial Magnamhut is Special Summoned by an action that does not start a Chain. Its optional trigger effect is available. Explain when that trigger is placed on a Chain and when the opponent receives the next opportunity to activate a fast effect.",
+      "rule_context": "Use the official Fast Effect Timing chart. Assume no other trigger effects are available."
+    },
+    {
+      "record_id": "u-rt-006-magnamhut-after-chain-ocg",
+      "group_id": "u-rt-006",
+      "snapshot_id": "ocg-jp-2026-07-01",
+      "task": "RuleAndTiming",
+      "candidate_kind": "rule_and_timing",
+      "card_ids": [33854624],
+      "question": "Bystial Magnamhut is Special Summoned while an existing Chain resolves. Can its Special Summon trigger effect be activated in the middle of that Chain, or must it wait until the Chain has completely resolved? Describe the next response window.",
+      "rule_context": "Assume the trigger condition is met and no card prevents activation. Chains do not accept new Chain Links while resolving."
+    },
+    {
+      "record_id": "u-rt-007-ttt-negated-activation-tcg",
+      "group_id": "u-rt-007",
+      "snapshot_id": "tcg-kde-e-2026-05-18",
+      "task": "RuleAndTiming",
+      "candidate_kind": "rule_and_timing",
+      "card_ids": [25311006],
+      "question": "During your Main Phase, the opponent activates a monster effect, but that effect is negated. After the Chain resolves, is Triple Tactics Talent's activation condition satisfied? Explain whether the condition depends on activation or successful resolution.",
+      "rule_context": "Assume the activation itself was not negated and Triple Tactics Talent is otherwise legal to activate."
+    },
+    {
+      "record_id": "u-rt-008-droll-nonfinal-chain-event-ocg",
+      "group_id": "u-rt-008",
+      "snapshot_id": "ocg-jp-2026-07-01",
+      "task": "RuleAndTiming",
+      "candidate_kind": "rule_and_timing",
+      "card_ids": [94145021],
+      "question": "During a resolving Chain outside the Draw Phase, an earlier Chain Link adds a card from the Main Deck to the opponent's hand, and a later-resolving event becomes the last thing that happened. After the Chain resolves, can Droll & Lock Bird be activated?",
+      "rule_context": "Focus on the difference between an optional 'If' trigger and an optional 'When' trigger, and remember that effects cannot be activated while a Chain is resolving."
+    },
+    {
+      "record_id": "u-rt-009-ghost-belle-called-by-tcg",
+      "group_id": "u-rt-009",
+      "snapshot_id": "tcg-kde-e-2026-05-18",
+      "task": "RuleAndTiming",
+      "candidate_kind": "rule_and_timing",
+      "card_ids": [73642296, 24224830],
+      "question": "Called by the Grave is activated targeting a monster in the opponent's GY. Can Ghost Belle & Haunted Mansion be chained? Identify the exact included operation that determines the answer and describe the Chain if Ghost Belle resolves successfully.",
+      "rule_context": "Assume both cards are otherwise legal and no additional Chain Links are added."
+    },
+    {
+      "record_id": "u-rt-010-sp-temporary-banish-ocg",
+      "group_id": "u-rt-010",
+      "snapshot_id": "ocg-jp-2026-07-01",
+      "task": "RuleAndTiming",
+      "candidate_kind": "rule_and_timing",
+      "card_ids": [29301450],
+      "question": "S:P Little Knight's second effect resolves and temporarily banishes both targeted monsters. Describe when and how the return is applied in the End Phase, and whether the two monsters are treated as newly Summoned when they return.",
+      "rule_context": "Assume both cards remain banished until the End Phase and all zones needed for their return are available."
+    },
+    {
+      "record_id": "u-cf-a1-imperm-empty-field-tcg",
+      "group_id": "u-cf-a-imperm-hand",
+      "snapshot_id": "tcg-kde-e-2026-05-18",
+      "task": "RuleAndTiming",
+      "candidate_kind": "counterfactual",
+      "card_ids": [10045474],
+      "question": "You control no cards and hold Infinite Impermanence in your hand. The opponent controls a valid face-up target. Can you activate Infinite Impermanence from your hand now?",
+      "rule_context": "Counterfactual variable: number of cards you control = 0. All other timing and legality requirements are satisfied."
+    },
+    {
+      "record_id": "u-cf-a2-imperm-controlled-card-tcg",
+      "group_id": "u-cf-a-imperm-hand",
+      "snapshot_id": "tcg-kde-e-2026-05-18",
+      "task": "RuleAndTiming",
+      "candidate_kind": "counterfactual",
+      "card_ids": [10045474],
+      "question": "You control one face-up card and hold Infinite Impermanence in your hand. The opponent controls a valid face-up target. Can you activate Infinite Impermanence from your hand now?",
+      "rule_context": "Counterfactual variable: number of cards you control = 1. Everything else is identical to u-cf-a1-imperm-empty-field-tcg."
+    },
+    {
+      "record_id": "u-cf-b1-veiler-main-phase-ocg",
+      "group_id": "u-cf-b-veiler-phase",
+      "snapshot_id": "ocg-jp-2026-07-01",
+      "task": "RuleAndTiming",
+      "candidate_kind": "counterfactual",
+      "card_ids": [97268402],
+      "question": "It is the opponent's Main Phase. You hold Effect Veiler and the opponent controls a valid face-up Effect Monster. Can you activate Effect Veiler?",
+      "rule_context": "Counterfactual variable: current phase = opponent's Main Phase. All other state is fixed."
+    },
+    {
+      "record_id": "u-cf-b2-veiler-end-phase-ocg",
+      "group_id": "u-cf-b-veiler-phase",
+      "snapshot_id": "ocg-jp-2026-07-01",
+      "task": "RuleAndTiming",
+      "candidate_kind": "counterfactual",
+      "card_ids": [97268402],
+      "question": "It is the opponent's End Phase. You hold Effect Veiler and the opponent controls the same valid face-up Effect Monster. Can you activate Effect Veiler?",
+      "rule_context": "Counterfactual variable: current phase = opponent's End Phase. Everything else is identical to u-cf-b1-veiler-main-phase-ocg."
+    },
+    {
+      "record_id": "u-cf-c1-ash-add-deck-tcg",
+      "group_id": "u-cf-c-ash-source-zone",
+      "snapshot_id": "tcg-kde-e-2026-05-18",
+      "task": "RuleAndTiming",
+      "candidate_kind": "counterfactual",
+      "card_ids": [14558127],
+      "question": "The opponent activates an effect whose text includes adding one card from the Main Deck to the hand. You hold Ash Blossom. Can Ash Blossom be chained to that activation?",
+      "rule_context": "Counterfactual variable: source zone of the added card = Main Deck. Assume the Chain is otherwise open for a Spell Speed 2 response."
+    },
+    {
+      "record_id": "u-cf-c2-ash-add-gy-tcg",
+      "group_id": "u-cf-c-ash-source-zone",
+      "snapshot_id": "tcg-kde-e-2026-05-18",
+      "task": "RuleAndTiming",
+      "candidate_kind": "counterfactual",
+      "card_ids": [14558127],
+      "question": "The opponent activates an otherwise identical effect whose text includes adding one card from the GY to the hand, but includes no operation involving the Main Deck. You hold Ash Blossom. Can Ash Blossom be chained to that activation?",
+      "rule_context": "Counterfactual variable: source zone of the added card = GY. Everything else is identical to u-cf-c1-ash-add-deck-tcg."
+    },
+    {
+      "record_id": "u-cf-d1-magnamhut-opponent-monster-ocg",
+      "group_id": "u-cf-d-magnamhut-quick",
+      "snapshot_id": "ocg-jp-2026-07-01",
+      "task": "RuleAndTiming",
+      "candidate_kind": "counterfactual",
+      "card_ids": [33854624],
+      "question": "During the opponent's Main Phase, the opponent controls a monster. You hold Bystial Magnamhut and there is a valid LIGHT monster in a GY. Can you activate Magnamhut's first effect in the current response window?",
+      "rule_context": "Counterfactual variable: opponent controls a monster = true. All other state is fixed."
+    },
+    {
+      "record_id": "u-cf-d2-magnamhut-no-opponent-monster-ocg",
+      "group_id": "u-cf-d-magnamhut-quick",
+      "snapshot_id": "ocg-jp-2026-07-01",
+      "task": "RuleAndTiming",
+      "candidate_kind": "counterfactual",
+      "card_ids": [33854624],
+      "question": "During the opponent's Main Phase, the opponent controls no monsters. You hold Bystial Magnamhut and the same valid LIGHT monster is in a GY. Can you activate Magnamhut's first effect in the current response window?",
+      "rule_context": "Counterfactual variable: opponent controls a monster = false. Everything else is identical to u-cf-d1-magnamhut-opponent-monster-ocg."
+    }
+  ]
+}

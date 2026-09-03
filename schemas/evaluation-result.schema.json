@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ygo-bench.org/schemas/evaluation-result.schema.json",
+  "title": "YGO-Bench per-record evaluation result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "evaluation_id",
+    "run_id",
+    "record_id",
+    "status",
+    "scorer",
+    "metrics",
+    "errors",
+    "attribution"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "evaluation_id": {"$ref": "#/$defs/id"},
+    "run_id": {"$ref": "#/$defs/id"},
+    "record_id": {"$ref": "#/$defs/id"},
+    "status": {"enum": ["scored", "unscorable"]},
+    "scorer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "config_sha256"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "config_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "primary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "value", "minimum", "maximum", "higher_is_better"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "value": {"type": "number"},
+        "minimum": {"type": "number"},
+        "maximum": {"type": "number"},
+        "higher_is_better": {"type": "boolean"}
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": {"type": ["number", "integer", "null"]}
+    },
+    "errors": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "attribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["invalid_action", "parser_error", "retry_count", "repair_count", "fallback_used"],
+      "properties": {
+        "invalid_action": {"type": "boolean"},
+        "parser_error": {"type": "boolean"},
+        "retry_count": {"type": "integer", "minimum": 0},
+        "repair_count": {"type": "integer", "minimum": 0},
+        "fallback_used": {"type": "boolean"}
+      }
+    },
+    "cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "latency_ms": {"type": "number", "minimum": 0},
+        "input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "output_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "currency": {"type": ["string", "null"]},
+        "amount": {"type": ["number", "null"], "minimum": 0}
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "scored"}}},
+      "then": {"required": ["primary"]}
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

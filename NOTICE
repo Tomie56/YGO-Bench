@@ -1,0 +1,16 @@
+YGO-Bench
+Copyright 2026 Jinhao Jing
+
+YGO-Bench is an independent academic research project. It is not affiliated
+with, endorsed by, or sponsored by Konami Digital Entertainment.
+
+The Apache License 2.0 applies only to original YGO-Bench code and
+documentation unless a file or source manifest states otherwise. Yu-Gi-Oh!,
+related trademarks, card artwork, card text, and other third-party materials
+remain the property of their respective owners and are not licensed under the
+Apache License 2.0 by this repository.
+
+The public review pages include composite benchmark images for research review.
+Their inclusion does not alter the ownership or license of underlying
+third-party assets. Dataset and software provenance is recorded in
+references/SOURCES.md.

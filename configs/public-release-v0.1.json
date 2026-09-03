@@ -1,0 +1,35 @@
+{
+  "release_id": "public-preview-v0.1",
+  "files": [
+    ".gitattributes",
+    ".gitignore",
+    "LICENSE",
+    "NOTICE",
+    "README.md",
+    "environment.yml",
+    "references/SOURCES.md",
+    "data/benchmark/deck/pilot-candidates-v0.1.jsonl",
+    "data/benchmark/understanding/pilot-candidates-v0.1.jsonl"
+  ],
+  "directories": [
+    ".github",
+    "configs",
+    "docs/reports",
+    "experiments",
+    "patches",
+    "schemas",
+    "scripts",
+    "site",
+    "tests",
+    "ygo_bench"
+  ],
+  "exclude": [
+    "docs/reports/cpu-pilot-results-2026-08-04.md",
+    "docs/reports/github-publication-plan-2026-09-04.md",
+    "docs/reports/next-experiment-plan.md",
+    "docs/reports/repository-inventory-2026-09-03.md",
+    "docs/reports/ygoenv-card-id-fix-2026-08-04.md",
+    "tests/test_construction_pilot.py",
+    "tests/test_understanding_pilot.py"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "pilot_id": "construction-pilot-v0.1",
+  "schema_version": "0.1.0",
+  "created_at": "2026-08-26T00:00:00Z",
+  "split": "dev",
+  "forbidden_substitution": {
+    "card_id": 55144522,
+    "name": "Pot of Greed",
+    "required_limit": 0
+  },
+  "task_set": [
+    "source_legality_audit",
+    "controlled_corruption_audit",
+    "controlled_corruption_minimal_repair"
+  ]
+}

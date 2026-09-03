@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ygo-bench.local/schemas/runtime-gate-protocol.schema.json",
+  "title": "YGO-Bench modern runtime gate protocol",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "gate_protocol_id",
+    "version",
+    "runtime_snapshot_id",
+    "action_policy",
+    "visibility_codes",
+    "gates"
+  ],
+  "properties": {
+    "gate_protocol_id": {"type": "string", "minLength": 1},
+    "version": {"const": "0.1.0"},
+    "runtime_snapshot_id": {"type": "string", "minLength": 1},
+    "action_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "rng"],
+      "properties": {
+        "name": {"const": "uniform_legal_action"},
+        "rng": {"const": "numpy_pcg64"}
+      }
+    },
+    "visibility_codes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "padding",
+        "hidden_private",
+        "owner_visible",
+        "public_field",
+        "confirmed_reveal",
+        "selectable_own_deck",
+        "opponent_facedown"
+      ],
+      "properties": {
+        "padding": {"const": 0},
+        "hidden_private": {"const": 1},
+        "owner_visible": {"const": 2},
+        "public_field": {"const": 3},
+        "confirmed_reveal": {"const": 4},
+        "selectable_own_deck": {"const": 5},
+        "opponent_facedown": {"const": 6}
+      }
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "step",
+        "hidden_information",
+        "trace_replay",
+        "lifecycle",
+        "throughput",
+        "random_eval"
+      ],
+      "properties": {
+        "step": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["result_stem", "action_index"],
+          "properties": {
+            "result_stem": {"const": "step"},
+            "action_index": {"const": 0}
+          }
+        },
+        "hidden_information": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "result_stem",
+            "action_seed_offset",
+            "max_steps",
+            "minimum_steps_audited",
+            "minimum_private_rows",
+            "minimum_confirmed_reveal_rows"
+          ],
+          "properties": {
+            "result_stem": {"const": "hidden_information"},
+            "action_seed_offset": {"type": "integer", "minimum": 1},
+            "max_steps": {"type": "integer", "minimum": 1},
+            "minimum_steps_audited": {"type": "integer", "minimum": 1},
+            "minimum_private_rows": {"type": "integer", "minimum": 1},
+            "minimum_confirmed_reveal_rows": {"type": "integer", "minimum": 1}
+          }
+        },
+        "trace_replay": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["result_stem", "action_seed_offset", "max_steps"],
+          "properties": {
+            "result_stem": {"const": "trace_replay"},
+            "action_seed_offset": {"type": "integer", "minimum": 1},
+            "max_steps": {"type": "integer", "minimum": 1}
+          }
+        },
+        "lifecycle": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["result_stem", "completed_cycles_target"],
+          "properties": {
+            "result_stem": {"const": "lifecycle_100"},
+            "completed_cycles_target": {"const": 100}
+          }
+        },
+        "throughput": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "result_stem",
+            "action_seed_offset",
+            "environment_overrides",
+            "warmup_steps",
+            "measured_steps",
+            "minimum_steps_per_second"
+          ],
+          "properties": {
+            "result_stem": {"const": "throughput"},
+            "action_seed_offset": {"type": "integer", "minimum": 1},
+            "environment_overrides": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["num_envs", "batch_size", "num_threads"],
+              "properties": {
+                "num_envs": {"const": 16},
+                "batch_size": {"const": 16},
+                "num_threads": {"const": 16}
+              }
+            },
+            "warmup_steps": {"type": "integer", "minimum": 0},
+            "measured_steps": {"type": "integer", "minimum": 1},
+            "minimum_steps_per_second": {"const": 1000}
+          }
+        },
+        "random_eval": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "result_stem",
+            "action_seed_offset",
+            "episodes",
+            "max_steps_per_episode"
+          ],
+          "properties": {
+            "result_stem": {"const": "random_eval_32"},
+            "action_seed_offset": {"type": "integer", "minimum": 1},
+            "episodes": {"const": 32},
+            "max_steps_per_episode": {"type": "integer", "minimum": 1}
+          }
+        }
+      }
+    }
+  }
+}

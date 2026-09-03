@@ -1,0 +1,55 @@
+{
+  "runtime_snapshot_id": "runtime-modern-v1-2026-07-20",
+  "runtime_snapshot": "snapshots/runtime-modern-v1-2026-07-20.json",
+  "extension": "tmp/build-edopro-modern/edopro_ygoenv.so",
+  "cdb": "references/babelcdb/cards.cdb",
+  "cardscripts": "references/cardscripts",
+  "code_list": "data/runtime_snapshots/runtime-modern-v1-2026-07-20/code_list.txt",
+  "asset_manifest": "data/runtime_snapshots/runtime-modern-v1-2026-07-20/manifest.json",
+  "decks": {
+    "tcg_european_wcq_2026_kewl_tune_top64": "data/fixed_snapshots/tcg-kde-e-2026-05-18/decks/european-wcq-2026-kewl-tune-top64.ydk",
+    "ocg_japan_championship_2026_kewl_tune_top16": "data/fixed_snapshots/ocg-jp-2026-07-01/decks/japan-championship-2026-kewl-tune-top16.ydk"
+  },
+  "environments": {
+    "tcg": {
+      "snapshot_id": "tcg-kde-e-2026-05-18",
+      "spec": {
+        "num_envs": 1,
+        "batch_size": 1,
+        "num_threads": 1,
+        "seed": 20260808,
+        "max_episode_steps": 10000,
+        "deck1": "tcg_european_wcq_2026_kewl_tune_top64",
+        "deck2": "tcg_european_wcq_2026_kewl_tune_top64",
+        "player": -1,
+        "play_mode": "random",
+        "verbose": false,
+        "record": false,
+        "max_options": 64,
+        "max_cards": 75,
+        "n_history_actions": 32,
+        "max_multi_select": 10
+      }
+    },
+    "ocg": {
+      "snapshot_id": "ocg-jp-2026-07-01",
+      "spec": {
+        "num_envs": 1,
+        "batch_size": 1,
+        "num_threads": 1,
+        "seed": 20260809,
+        "max_episode_steps": 10000,
+        "deck1": "ocg_japan_championship_2026_kewl_tune_top16",
+        "deck2": "ocg_japan_championship_2026_kewl_tune_top16",
+        "player": -1,
+        "play_mode": "random",
+        "verbose": false,
+        "record": false,
+        "max_options": 64,
+        "max_cards": 75,
+        "n_history_actions": 32,
+        "max_multi_select": 10
+      }
+    }
+  }
+}

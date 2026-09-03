@@ -1,0 +1,25 @@
+{
+  "schema_version": "0.1.0",
+  "record_id": "understanding-template-001",
+  "snapshot_id": "tcg-kde-e-2026-05-18",
+  "task": "CardSemantics",
+  "status": "candidate",
+  "input": {
+    "question": "Annotate the six semantic fields for this card effect.",
+    "card_ids": [89631139],
+    "card_text": "Candidate text must be replaced with the frozen official card text.",
+    "rule_context": "Use the frozen TCG snapshot and cite the applicable official rules."
+  },
+  "evidence": [
+    {
+      "source_id": "official-card-text-placeholder",
+      "uri": "local:replace-before-annotation",
+      "retrieved_at": "2026-08-09T00:00:00Z",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "evidence_level": "official_card_text"
+    }
+  ],
+  "annotations": [],
+  "gold": null,
+  "adjudication": null
+}

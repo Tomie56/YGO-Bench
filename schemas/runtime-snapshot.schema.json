@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ygo-bench.local/schemas/runtime-snapshot.schema.json",
+  "title": "YGO-Bench runtime snapshot",
+  "type": "object",
+  "required": [
+    "runtime_snapshot_id",
+    "frozen_at",
+    "status",
+    "engine",
+    "scripts",
+    "cdb",
+    "lflists",
+    "card_pool_policy",
+    "compatibility"
+  ],
+  "properties": {
+    "runtime_snapshot_id": { "type": "string", "minLength": 1 },
+    "frozen_at": { "type": "string", "format": "date" },
+    "status": {
+      "enum": [
+        "source_ready_adapter_pending",
+        "adapter_buildable_engine_pending",
+        "adapter_initialized_smoke_pending",
+        "reset_smoke_verified_followup_gates_pending",
+        "engine_ready"
+      ]
+    },
+    "engine": { "$ref": "#/$defs/source" },
+    "lua": { "$ref": "#/$defs/lua_source" },
+    "scripts": { "$ref": "#/$defs/source" },
+    "cdb": { "$ref": "#/$defs/source" },
+    "lflists": { "$ref": "#/$defs/source" },
+    "card_pool_policy": {
+      "type": "object",
+      "required": ["asset_cutoff", "default_scope"],
+      "properties": {
+        "asset_cutoff": { "type": "string", "format": "date" },
+        "default_scope": { "const": "official_released_cards" }
+      },
+      "additionalProperties": false
+    },
+    "compatibility": {
+      "type": "object",
+      "required": [
+        "engine_api",
+        "legacy_ygoenv_api",
+        "adapter_status",
+        "adapter_source",
+        "adapter_transform",
+        "build_script",
+        "asset_generator",
+        "runtime_config",
+        "asset_manifest",
+        "card_data_loading"
+      ],
+      "properties": {
+        "engine_api": { "const": "OCG_*" },
+        "legacy_ygoenv_api": { "const": "create_duel/process/set_response*" },
+        "adapter_status": {
+          "enum": [
+            "not_integrated",
+            "buildable_not_runtime_verified",
+            "init_and_pool_construct_verified",
+            "tcg_ocg_reset_verified",
+            "runtime_verified"
+          ]
+        },
+        "adapter_source": { "type": "string", "minLength": 1 },
+        "adapter_transform": { "type": "string", "minLength": 1 },
+        "build_script": { "type": "string", "minLength": 1 },
+        "asset_generator": { "type": "string", "minLength": 1 },
+        "runtime_config": { "type": "string", "minLength": 1 },
+        "asset_manifest": { "type": "string", "minLength": 1 },
+        "card_data_loading": { "const": "full_babelcdb_at_init" },
+        "query_protocol": { "type": "string", "minLength": 1 },
+        "lua_linkage": { "type": "string", "minLength": 1 },
+        "compiler": { "type": "string", "minLength": 1 },
+        "compiler_version": { "type": "string", "minLength": 1 },
+        "optimization": { "type": "string", "minLength": 1 },
+        "build_strategy": { "type": "string", "minLength": 1 },
+        "hidden_information_policy": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "used_by": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": ["repository", "commit", "commit_date", "local_path", "license"],
+      "properties": {
+        "repository": { "type": "string", "format": "uri" },
+        "commit": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+        "commit_date": { "type": "string", "format": "date" },
+        "local_path": { "type": "string", "minLength": 1 },
+        "license": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "lua_source": {
+      "type": "object",
+      "required": [
+        "repository",
+        "commit",
+        "version",
+        "local_path",
+        "archive_sha256",
+        "compile_as",
+        "license"
+      ],
+      "properties": {
+        "repository": { "type": "string", "format": "uri" },
+        "commit": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+        "version": { "type": "string", "minLength": 1 },
+        "local_path": { "type": "string", "minLength": 1 },
+        "archive_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "compile_as": { "const": "c++" },
+        "license": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

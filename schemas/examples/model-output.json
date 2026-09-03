@@ -1,0 +1,35 @@
+{
+  "schema_version": "0.1.0",
+  "run_id": "example-run-001",
+  "record_id": "example-understanding-001",
+  "attempt": 1,
+  "status": "ok",
+  "model": {
+    "provider": "local",
+    "model_id": "example-model",
+    "revision": "example-revision",
+    "inference_mode": "local",
+    "quantization": "Q4"
+  },
+  "harness": {
+    "condition": "C1",
+    "legal_actions": "hidden",
+    "snapshot_rag": false,
+    "checker": false,
+    "memory_planner": false,
+    "config_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "answer": {"legal": true},
+  "confidence": 0.8,
+  "latency_ms": 10.0,
+  "usage": {"input_tokens": 100, "output_tokens": 10, "total_tokens": 110},
+  "audit": {
+    "retry_count": 0,
+    "repair_count": 0,
+    "fallback_used": false,
+    "actors": [{"actor": "model", "operation": "predict legality"}]
+  },
+  "raw_response_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "provider_request_id": null,
+  "error": null
+}

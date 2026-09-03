@@ -1,0 +1,82 @@
+{
+  "readiness_id": "pre-experiment-readiness-v0.1",
+  "protocol": "docs/reports/benchmark-experiment-protocol-v0.1.md",
+  "environment": {
+    "distro": "Ubuntu-22.04",
+    "conda_env": "ygo",
+    "python": "3.10.20",
+    "packages": {
+      "jsonschema": "4.26.0",
+      "numpy": "1.26.4",
+      "jax": "0.4.28",
+      "gymnasium": "0.29.1"
+    }
+  },
+  "runtime_config": "configs/runtime-modern-v1-2026-07-20.json",
+  "runtime_gate_protocol": "configs/runtime-modern-gates-v0.1.json",
+  "data_qualification_result": "results/e0_data_qualification/metrics.json",
+  "foundation_gates": [
+    {"gate_id": "init", "path": "results/runtime_modern_v1/gate_init.json", "stage": "init", "profile": null},
+    {"gate_id": "construct_tcg", "path": "results/runtime_modern_v1/gate_construct_tcg.json", "stage": "construct", "profile": "tcg"},
+    {"gate_id": "construct_ocg", "path": "results/runtime_modern_v1/gate_construct_ocg.json", "stage": "construct", "profile": "ocg"},
+    {"gate_id": "reset_tcg", "path": "results/runtime_modern_v1/gate_reset_tcg.json", "stage": "reset", "profile": "tcg"},
+    {"gate_id": "reset_ocg", "path": "results/runtime_modern_v1/gate_reset_ocg.json", "stage": "reset", "profile": "ocg"}
+  ],
+  "required_runtime_gates": [
+    {"gate_id": "step_tcg", "path": "results/runtime_modern_v1/gate_step_tcg.json", "kind": "step", "profile": "tcg"},
+    {"gate_id": "step_ocg", "path": "results/runtime_modern_v1/gate_step_ocg.json", "kind": "step", "profile": "ocg"},
+    {"gate_id": "hidden_information_tcg", "path": "results/runtime_modern_v1/gate_hidden_information_tcg.json", "kind": "hidden_information", "profile": "tcg"},
+    {"gate_id": "hidden_information_ocg", "path": "results/runtime_modern_v1/gate_hidden_information_ocg.json", "kind": "hidden_information", "profile": "ocg"},
+    {"gate_id": "trace_replay_tcg", "path": "results/runtime_modern_v1/gate_trace_replay_tcg.json", "kind": "trace_replay", "profile": "tcg"},
+    {"gate_id": "trace_replay_ocg", "path": "results/runtime_modern_v1/gate_trace_replay_ocg.json", "kind": "trace_replay", "profile": "ocg"},
+    {"gate_id": "lifecycle_100_tcg", "path": "results/runtime_modern_v1/gate_lifecycle_100_tcg.json", "kind": "lifecycle", "profile": "tcg"},
+    {"gate_id": "lifecycle_100_ocg", "path": "results/runtime_modern_v1/gate_lifecycle_100_ocg.json", "kind": "lifecycle", "profile": "ocg"},
+    {"gate_id": "throughput_tcg", "path": "results/runtime_modern_v1/gate_throughput_tcg.json", "kind": "throughput", "profile": "tcg"},
+    {"gate_id": "throughput_ocg", "path": "results/runtime_modern_v1/gate_throughput_ocg.json", "kind": "throughput", "profile": "ocg"},
+    {"gate_id": "random_eval_32_tcg", "path": "results/runtime_modern_v1/gate_random_eval_32_tcg.json", "kind": "random_eval", "profile": "tcg"},
+    {"gate_id": "random_eval_32_ocg", "path": "results/runtime_modern_v1/gate_random_eval_32_ocg.json", "kind": "random_eval", "profile": "ocg"}
+  ],
+  "contract_examples": [
+    {"kind": "benchmark-record", "path": "schemas/examples/benchmark-record.json"},
+    {"kind": "model-output", "path": "schemas/examples/model-output.json"},
+    {"kind": "evaluation-result", "path": "schemas/examples/evaluation-result.json"},
+    {"kind": "understanding-annotation", "path": "schemas/examples/understanding-annotation.json"},
+    {"kind": "runtime-snapshot", "path": "snapshots/runtime-modern-v1-2026-07-20.json"},
+    {"kind": "runtime-gate-protocol", "path": "configs/runtime-modern-gates-v0.1.json"},
+    {"kind": "environment-snapshot", "path": "snapshots/tcg-kde-e-2026-05-18.json"},
+    {"kind": "environment-snapshot", "path": "snapshots/ocg-jp-2026-07-01.json"},
+    {"kind": "fixed-scenario", "path": "data/fixed_snapshots/tcg-kde-e-2026-05-18/scenarios.json"},
+    {"kind": "fixed-scenario", "path": "data/fixed_snapshots/ocg-jp-2026-07-01/scenarios.json"}
+  ],
+  "paper_documents": [
+    "docs/reports/research-program.md",
+    "docs/reports/benchmark-experiment-protocol-v0.1.md",
+    "docs/reports/understanding-annotation-protocol-v0.1.md",
+    "docs/reports/dataset-benchmark-design.md",
+    "docs/reports/experiment-roadmap-2026-08-06.md"
+  ],
+  "snapshot_ids": ["tcg-kde-e-2026-05-18", "ocg-jp-2026-07-01"],
+  "required_implementation": {
+    "contracts": {
+      "path": "ygo_bench/contracts.py",
+      "module": "ygo_bench.contracts",
+      "version_symbol": "SCHEMA_VERSION",
+      "version": "0.1.0",
+      "required_symbols": ["validate_document", "validate_path"]
+    },
+    "scorers": {
+      "path": "ygo_bench/scoring.py",
+      "module": "ygo_bench.scoring",
+      "version_symbol": "SCORER_VERSION",
+      "version": "0.1.0",
+      "required_symbols": ["SCORERS", "TASK_SCORERS", "score_record"]
+    },
+    "model_adapter": {
+      "path": "ygo_bench/models/base.py",
+      "module": "ygo_bench.models.base",
+      "version_symbol": "ADAPTER_PROTOCOL_VERSION",
+      "version": "0.1.0",
+      "required_symbols": ["InferenceRequest", "ProviderResponse", "ModelAdapter"]
+    }
+  }
+}

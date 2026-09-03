@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>YGO-Bench 人工审阅</title>
+  <link rel="stylesheet" href="assets/reviewer.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <p>YGO-BENCH</p>
+      <h1>人工审阅终端</h1>
+    </div>
+    <nav aria-label="站点导航">
+      <a href="../">项目主页</a>
+      <a href="https://github.com/Tomie56/YGO-Bench">代码仓库</a>
+    </nav>
+    <div class="progress" aria-live="polite">
+      <span id="progressText">载入中</span>
+      <div><i id="progressBar"></i></div>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <aside class="filters">
+      <h2>题目范围</h2>
+      <label>题型<select id="categoryFilter"></select></label>
+      <label>子类型<select id="subtypeFilter"></select></label>
+      <label>审阅状态<select id="statusFilter">
+        <option value="all">全部状态</option>
+        <option value="pending">待审阅</option>
+        <option value="pass">通过</option>
+        <option value="revise">需修改</option>
+        <option value="reject">删除</option>
+      </select></label>
+      <label class="check"><input id="issuesOnly" type="checkbox" />只看资产 / 资格问题</label>
+      <div class="asset-summary" id="assetSummary"></div>
+      <div class="thumb-list" id="thumbList"></div>
+    </aside>
+
+    <section class="viewer">
+      <div class="viewer-toolbar">
+        <button id="previousButton" type="button" title="上一题" aria-label="上一题">&#8592;</button>
+        <div>
+          <strong id="itemTitle">-</strong>
+          <span id="itemCounter">0 / 0</span>
+        </div>
+        <button id="zoomOutButton" type="button" title="缩小" aria-label="缩小">&#8722;</button>
+        <button id="zoomResetButton" type="button" title="适应窗口" aria-label="适应窗口">&#9633;</button>
+        <button id="zoomInButton" type="button" title="放大" aria-label="放大">&#43;</button>
+        <button id="nextButton" type="button" title="下一题" aria-label="下一题">&#8594;</button>
+      </div>
+      <div class="image-stage" id="imageStage">
+        <img id="reviewImage" alt="当前题目的审阅图" />
+      </div>
+    </section>
+
+    <aside class="inspector">
+      <p class="category" id="itemCategory">-</p>
+      <h2 id="itemSubtitle">-</h2>
+      <dl>
+        <div><dt>环境</dt><dd id="itemEnvironment">-</dd></div>
+        <div><dt>来源</dt><dd id="itemSource">-</dd></div>
+        <div><dt>Core 状态</dt><dd id="itemCore">-</dd></div>
+      </dl>
+      <section class="issues">
+        <h3>资产与资格问题</h3>
+        <ul id="itemIssues"></ul>
+      </section>
+      <section class="review-form">
+        <h3>人工结论</h3>
+        <div class="decision-buttons">
+          <button type="button" data-decision="pass">通过</button>
+          <button type="button" data-decision="revise">需修改</button>
+          <button type="button" data-decision="reject">删除</button>
+        </div>
+        <label>备注<textarea id="reviewNote" rows="6" maxlength="4000"></textarea></label>
+        <button class="save-button" id="saveReviewButton" type="button">保存审阅</button>
+        <p id="saveStatus" aria-live="polite"></p>
+      </section>
+      <section class="review-data">
+        <h3>标注数据</h3>
+        <p id="storageNotice">正在检查存储方式</p>
+        <div>
+          <button id="importButton" type="button">导入 JSONL</button>
+          <button id="exportButton" type="button">导出 JSONL</button>
+          <input id="importInput" type="file" accept=".jsonl,application/json" hidden />
+        </div>
+      </section>
+    </aside>
+  </main>
+  <script src="assets/reviewer.js"></script>
+</body>
+</html>

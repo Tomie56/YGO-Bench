@@ -1,0 +1,51 @@
+{
+  "schema_version": "0.1.0",
+  "record_id": "example-understanding-001",
+  "group_id": "example-understanding-group-001",
+  "layer": "understanding",
+  "task": "CounterfactualRule",
+  "snapshot_id": "tcg-kde-e-2026-05-18",
+  "split": "dev",
+  "input": {
+    "observation": {"state_ref": "example-state-before"},
+    "question": "Can the declared effect be activated in this state?"
+  },
+  "target": {
+    "legal": true,
+    "explanation_labels": ["cost_payable", "timing_open"]
+  },
+  "environment": {
+    "runtime_snapshot_id": "runtime-modern-v1-2026-07-20",
+    "engine_seed": 20260808,
+    "pre_state_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "provenance": {
+    "created_at": "2026-08-09T00:00:00Z",
+    "sources": [
+      {
+        "source_id": "example-engine-state",
+        "uri": "schemas/examples/benchmark-record.json",
+        "retrieved_at": "2026-08-09T00:00:00Z",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "evidence_level": "example_only"
+      }
+    ],
+    "generator": {
+      "name": "example-generator",
+      "version": "0.1.0",
+      "config_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  },
+  "verifier": {
+    "kind": "engine",
+    "name": "example-engine-verifier",
+    "version": "0.1.0",
+    "gold_level": "G1",
+    "config": {"action": "activate"}
+  },
+  "visibility": {
+    "public_fields": ["input"],
+    "private_fields": ["target", "environment.pre_state_sha256"]
+  },
+  "metadata": {"fixture_only": true}
+}

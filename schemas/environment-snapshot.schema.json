@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ygo-bench.local/schemas/environment-snapshot.schema.json",
+  "title": "YGO-Bench environment snapshot",
+  "type": "object",
+  "required": [
+    "snapshot_id",
+    "runtime_snapshot_id",
+    "product",
+    "regulation",
+    "format",
+    "region",
+    "mode",
+    "banlist",
+    "banlist_effective_date",
+    "card_pool_flag",
+    "banlist_semantics",
+    "deck_rules",
+    "core_commit",
+    "scripts_commit",
+    "cdb_commit",
+    "artifacts",
+    "authority"
+  ],
+  "properties": {
+    "snapshot_id": { "type": "string", "minLength": 1 },
+    "runtime_snapshot_id": { "type": "string", "minLength": 1 },
+    "product": { "const": "paper" },
+    "regulation": { "enum": ["TCG", "OCG"] },
+    "format": { "type": "string", "minLength": 1 },
+    "region": { "type": "string", "minLength": 1 },
+    "mode": { "enum": ["advanced_bo3", "ranking_duel_bo3"] },
+    "master_rule": { "type": ["string", "null"] },
+    "banlist": { "type": "string", "minLength": 1 },
+    "banlist_effective_date": { "type": "string", "format": "date" },
+    "card_pool_cutoff": { "type": ["string", "null"], "format": "date" },
+    "card_pool_flag": {
+      "description": "BabelCDB datas.ot availability bit required for this regulation (OCG=1, TCG=2).",
+      "enum": [1, 2]
+    },
+    "banlist_semantics": { "const": "combined_main_extra_side_copy_limit" },
+    "deck_rules": {
+      "type": "object",
+      "required": ["main", "extra", "side"],
+      "properties": {
+        "main": { "$ref": "#/$defs/zone_bounds" },
+        "extra": { "$ref": "#/$defs/zone_bounds" },
+        "side": { "$ref": "#/$defs/zone_bounds" }
+      },
+      "additionalProperties": false
+    },
+    "core_commit": { "type": "string", "minLength": 1 },
+    "scripts_commit": { "type": "string", "minLength": 1 },
+    "cdb_commit": { "type": "string", "minLength": 1 },
+    "lflist_commit": { "type": ["string", "null"] },
+    "artifacts": {
+      "type": "object",
+      "required": ["cards_cdb", "lflist"],
+      "properties": {
+        "cards_cdb": { "$ref": "#/$defs/artifact" },
+        "cards_cdb_layers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/artifact" },
+          "minItems": 1
+        },
+        "card_catalog_supplements": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/artifact" },
+          "minItems": 1
+        },
+        "lflist": { "$ref": "#/$defs/artifact" },
+        "rulebook": { "$ref": "#/$defs/artifact" },
+        "rules_update": { "$ref": "#/$defs/artifact" },
+        "tournament_policy": { "$ref": "#/$defs/artifact" },
+        "official_banlist": { "$ref": "#/$defs/artifact" },
+        "event_rules": { "$ref": "#/$defs/artifact" }
+      },
+      "additionalProperties": false
+    },
+    "authority": {
+      "type": "object",
+      "required": ["banlist_url"],
+      "properties": {
+        "banlist_url": { "type": "string", "format": "uri" },
+        "banlist_updated_at": { "type": ["string", "null"], "format": "date" },
+        "ruleset_label": { "type": "string", "minLength": 1 },
+        "rulebook_url": { "type": "string", "format": "uri" },
+        "rules_update_url": { "type": "string", "format": "uri" },
+        "tournament_policy_url": { "type": "string", "format": "uri" },
+        "tournament_policy_version": { "type": "string", "minLength": 1 },
+        "tournament_policy_effective_date": { "type": "string", "format": "date" },
+        "event_rules_url": { "type": "string", "format": "uri" }
+      },
+      "additionalProperties": false
+    },
+    "open_fields": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "regulation": { "const": "TCG" } } },
+      "then": {
+        "properties": {
+          "card_pool_flag": { "const": 2 },
+          "mode": { "const": "advanced_bo3" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "regulation": { "const": "OCG" } } },
+      "then": {
+        "properties": {
+          "card_pool_flag": { "const": 1 },
+          "mode": { "const": "ranking_duel_bo3" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "zone_bounds": {
+      "type": "object",
+      "required": ["min", "max"],
+      "properties": {
+        "min": { "type": "integer", "minimum": 0 },
+        "max": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "artifact": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[A-Fa-f0-9]{64}$" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

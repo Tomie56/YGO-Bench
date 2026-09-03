@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ygo-bench.local/schemas/fixed-scenario.schema.json",
+  "title": "YGO-Bench fixed scenario collection",
+  "type": "object",
+  "required": ["scenarios"],
+  "properties": {
+    "scenarios": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "scenario_id",
+          "snapshot_id",
+          "runtime_snapshot_id",
+          "task_family",
+          "scenario_type",
+          "player_deck",
+          "opponent_deck",
+          "requested_seed",
+          "engine_seed",
+          "action_seed",
+          "gold_status",
+          "runtime_adapter_ready",
+          "runtime_status",
+          "engine_ready",
+          "blockers"
+        ],
+        "properties": {
+          "scenario_id": { "type": "string", "minLength": 1 },
+          "snapshot_id": { "type": "string", "minLength": 1 },
+          "runtime_snapshot_id": { "type": "string", "minLength": 1 },
+          "task_family": { "const": "strategy" },
+          "scenario_type": { "const": "seeded_full_duel_start" },
+          "player_deck": { "type": "string", "minLength": 1 },
+          "opponent_deck": { "type": "string", "minLength": 1 },
+          "requested_seed": { "type": "integer" },
+          "engine_seed": { "type": "integer" },
+          "action_seed": { "type": "integer" },
+          "gold_status": { "const": "unlabeled_engine_trace" },
+          "runtime_adapter_ready": { "type": "boolean" },
+          "runtime_status": {
+            "enum": [
+              "source_ready_adapter_pending",
+              "adapter_buildable_engine_pending",
+              "adapter_initialized_smoke_pending",
+              "reset_smoke_verified_followup_gates_pending",
+              "engine_ready"
+            ]
+          },
+          "engine_ready": { "type": "boolean" },
+          "blockers": { "type": "object" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

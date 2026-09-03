@@ -1,7 +1,7 @@
 {
-  "dataset_version": "pilot-review-v0.1",
+  "dataset_version": "pilot-review-v0.2",
   "review_item_count": 116,
-  "source_manifest_sha256": "729ced3dc381049486176ca2b618c6e1ffbee66a32b42ffc42561d2b8ebc5218",
+  "source_manifest_sha256": "3c9d414eb58ae14e3cb0bb59133c306409f64e941e309d0762207b65634d5a44",
   "files": [
     {
       "path": ".nojekyll",
@@ -10,8 +10,8 @@
     },
     {
       "path": "assets/benchmark-preview.png",
-      "size": 211233,
-      "sha256": "5ecfb3507031c503617bf31067617bd16c1d710b636089696d093e285f68318b"
+      "size": 221010,
+      "sha256": "b5e78373aa115496bfbe011e741da1f047ff369ee47cf32387d1308f81eca012"
     },
     {
       "path": "assets/site.css",
@@ -35,13 +35,13 @@
     },
     {
       "path": "review/catalog.json",
-      "size": 65855,
-      "sha256": "9b61376842fd7c5a0bad47cb7dcdbdbc2cddfce94c5fc59ba6f376dc3f0f89ad"
+      "size": 65957,
+      "sha256": "af6f221932426afd79fa818fc17f040119093de2418909bee811642db837205e"
     },
     {
       "path": "review/config.json",
       "size": 105,
-      "sha256": "f877e67c23f6b1d7cfdecf547a0e9c841cea20893a37fe8b73863d71dd22bdd9"
+      "sha256": "94ebc38d0ffb6bbbb9fadb1c52257eee110ddc1e1f30e198638c9999aaffb2c6"
     },
     {
       "path": "review/construction/01-deck-721313-controlled-corruption.png",
@@ -150,333 +150,333 @@
     },
     {
       "path": "review/puzzles/01-Naim-DuelLinks-DuelistsChallenges-2-until-08-Feb-2020.png",
-      "size": 211233,
-      "sha256": "5ecfb3507031c503617bf31067617bd16c1d710b636089696d093e285f68318b"
+      "size": 221010,
+      "sha256": "b5e78373aa115496bfbe011e741da1f047ff369ee47cf32387d1308f81eca012"
     },
     {
       "path": "review/puzzles/02-Naim-DuelLinks-DuelistsChallenges-3-until-08-Feb-2020.png",
-      "size": 172931,
-      "sha256": "89458fa63f0789c896ea13c966abc83b589e1d6179fc443629f221d279ea90c4"
+      "size": 180377,
+      "sha256": "a60ddce25d00b5b916321bcb955beaa57e0ecb9e424b729190fe65bbf705c35c"
     },
     {
       "path": "review/puzzles/03-Naim-DuelLinks-DuelistsChallenges-5-until-08-Feb-2020.png",
-      "size": 209187,
-      "sha256": "f93f02e357a465412e9e24955cc499d4a3cd9008c7ad25ec5c34577f9fe838ff"
+      "size": 234241,
+      "sha256": "54a0ede808b3eebd6ccacb8dd1455803766eb458cf614403c0cb03130766a08f"
     },
     {
       "path": "review/puzzles/04-GX-Spirit-Caller-B10-Spark-Batteryman.png",
-      "size": 192157,
-      "sha256": "9ea839ae23528d5f0460f969b214344fcc2270198442fe6664bf4db88241e956"
+      "size": 221625,
+      "sha256": "262f7f2bb6612d1d108df30d2e759ce738df8d62b6b6e6a4fd27fea256733737"
     },
     {
       "path": "review/puzzles/05-GX-Spirit-Caller-B13-Testing-Your-Skills.png",
-      "size": 191137,
-      "sha256": "4baf719f0acc41041fa07f910b400d05ad87d57488f1cd090391bd7010c2fa4e"
+      "size": 210333,
+      "sha256": "f5b837e9762eb13d1ff619138a92cdd31af28334c8828b132fc2dc8546e83ce4"
     },
     {
       "path": "review/puzzles/06-GX-Spirit-Caller-B15-Wild-Vigor.png",
-      "size": 234102,
-      "sha256": "5191668b24a6958749bc8695fb474b57f3f78d5eea7b15c586f7ee8ca35b575c"
+      "size": 235586,
+      "sha256": "295f5eaa6b2b4a00f1ec5df235efaaf6a594134267451ea0655f3843a5cb56ac"
     },
     {
       "path": "review/puzzles/07-GX-Spirit-Caller-I08-Warm-Up.png",
-      "size": 277342,
-      "sha256": "1c737e520327ea07d6f2504aec5f1d9aaab6c9131cb49a3606124e2122a74d72"
+      "size": 312490,
+      "sha256": "5ce2516bc7b8536255c7f053b8f344f2970428bf426ba8af7034e84f60b9aa14"
     },
     {
       "path": "review/puzzles/08-AlphaKretin-02-Set-Rotation.png",
-      "size": 215550,
-      "sha256": "295acac909fcc7b063e01f6c6204493e5ad82d5c0c56de549beadb685d5ad931"
+      "size": 220831,
+      "sha256": "09f155ef618ebd02b5e04421e592b7f7d5406cd0172ea2dd7c51ef234ab1c1ad"
     },
     {
       "path": "review/puzzles/09-AlphaKretin-06-Quik-Fix.png",
-      "size": 256495,
-      "sha256": "a57a97c3ce8d10025869be2c736bd97716f96469d51fa57f9feab4096f992fdb"
+      "size": 280793,
+      "sha256": "195748c7a8959de7ab28b68c6c3e80c8c1e1d16014ec0704dde52eed0c1f8f8f"
     },
     {
       "path": "review/puzzles/10-AlphaKretin-12a-Cyber-Dragon-Max-Attack.png",
-      "size": 362536,
-      "sha256": "72211200099f4986f53f5d4a771b7cc60073bffe9885f03b6ceb0725a229d621"
+      "size": 469758,
+      "sha256": "1a08529de6fe93242c466552c11f0493ec48f3d78a4b2df1e0c61d54e1609f45"
     },
     {
       "path": "review/puzzles/11-AlphaKretin-12b-Cyber-Dragon-Max-Attack-Tag.png",
-      "size": 377607,
-      "sha256": "9f3d7b15fdae3caf5ea8bcacba7cf8fabad9228d5f45b0f4e4412d49b02045eb"
+      "size": 520108,
+      "sha256": "e0461cc90236483125f0aeaff279145da385b6176de74742f173c28a97506fe9"
     },
     {
       "path": "review/puzzles/12-AlphaKretin-13-The-Swarm.png",
-      "size": 173236,
-      "sha256": "45bf3d25b511f824e8587566772929564690d15ce026ed6aa9e1ae3267d320f4"
+      "size": 175868,
+      "sha256": "76b553eec39c85f836199c89d8207dd70929c8396bbd1adbc07b18fd8417ccc3"
     },
     {
       "path": "review/puzzles/13-Andre-Kuriboh-03.png",
-      "size": 325536,
-      "sha256": "d1776ce6077f7f326af01ff0ca5a1b2412cc87c26b2ef4eadaa5a4c1a6a7fd1f"
+      "size": 324765,
+      "sha256": "b55a8ee7762be11403bd10e77ffc8a964fcfff9458db5c34734f13cc1840346b"
     },
     {
       "path": "review/puzzles/14-Eroldin-01-Mastering-the-Red-Dragons.png",
-      "size": 220216,
-      "sha256": "71c8039add39f6ca5017c7b8027cac9e65555f82b959dd1f109a81988eb38875"
+      "size": 225262,
+      "sha256": "0313e11539331e90990891f3ead699e0c414b8d5fac99ba041952be9062c7c55"
     },
     {
       "path": "review/puzzles/15-Furtie-Hubo-01-Dark-Synchro.png",
-      "size": 228334,
-      "sha256": "2208ef4a2fa8e0e2a653743a65435d40bb8615861bea3d47b88176a156606d1b"
+      "size": 236215,
+      "sha256": "4bf06f432140a869d40fba4e69b1076f4d8926508ea17a1a0b0d3c3c634a9275"
     },
     {
       "path": "review/puzzles/16-Furtie-Hubo-02-DDD-Remastered.png",
-      "size": 244162,
-      "sha256": "36a33145392adb6f4d2ae9b418381e68e085ff1010cdfe7c8e0c31f49480fbee"
+      "size": 299846,
+      "sha256": "da9381a11a615198d7d7c05c4b6a1f1b7fbf87006ce8f189ee4292306a8775d3"
     },
     {
       "path": "review/puzzles/17-Furtie-Hubo-05-Infernity.png",
-      "size": 247033,
-      "sha256": "5119134153ddee5ab9484ed517354f517ca42f622ddedee62dcf8d9b71e670df"
+      "size": 298592,
+      "sha256": "40af2e459b7f8887e10de5c2922c52724a00a00675b807b1dec358ffd27d70b9"
     },
     {
       "path": "review/puzzles/18-Furtie-Hubo-06-Inzektor.png",
-      "size": 261744,
-      "sha256": "46635450141216f11d5df841b19aa46a205274d6f45f4941c604cfcca2b4b4b6"
+      "size": 318668,
+      "sha256": "833b1af1b26af853f33b95ff4f5e0df31421b43ac2273cbaf37e0e9bb6c7acf0"
     },
     {
       "path": "review/puzzles/19-Furtie-Hubo-07-Kozmo.png",
-      "size": 262767,
-      "sha256": "2fa0842ea8f94ceb17897fd28ead2a8341d1d7e8ee9a79689cf9eeab530f421c"
+      "size": 319446,
+      "sha256": "2c63bf31c67b23eba6e5ec376927275dfe5e313193163bf8ba1c20554665b7e1"
     },
     {
       "path": "review/puzzles/20-Furtie-Hubo-11-True-Metalfoes-Kozmo.png",
-      "size": 241857,
-      "sha256": "f706d58db956a0550daef74793472f6cc3dec7718b9a954954e9a62ec758ad76"
+      "size": 249683,
+      "sha256": "099254c9b9d80552f46438e60bcd1d7ed53eeaa547335d6570ef118a56e600e5"
     },
     {
       "path": "review/puzzles/21-Furtie-Hubo-14-Nekroz.png",
-      "size": 245498,
-      "sha256": "2b01bbadab18aa5b8919bb7d2474146eec0f6e0c1ed38c0f48f74fad91e7916d"
+      "size": 252319,
+      "sha256": "91559470bb5e58a459377045bc863cdc0fc504bc327b8093e5ebdf059e0de423"
     },
     {
       "path": "review/puzzles/22-Furtie-Hubo-16-Lunalight.png",
-      "size": 286797,
-      "sha256": "b8f4e0a3b7b0ed0529136fe8ec6f41cbe427f958832c75970f0b8010ac4d6eee"
+      "size": 361006,
+      "sha256": "149c94cbaf3e047b754e889dc5132146eb65b7b7b8ff7ecc1e7b1840d31a6d00"
     },
     {
       "path": "review/puzzles/23-Furtie-Hubo-17-Atlantean-Mermail.png",
-      "size": 272478,
-      "sha256": "9163cc352dd207cacd2eeb03d29339a22518a91d80425515b1853d879980df3f"
+      "size": 328742,
+      "sha256": "3a09cc5b0e7514eab396258ac128e8e8e18ad4ec98c293b2a38806d7bc523aeb"
     },
     {
       "path": "review/puzzles/24-Gideons-Unbreakable-Board.png",
-      "size": 214508,
-      "sha256": "8e173e4eb08dae326b7a41887e553c99065ef073101dbf19bdf94a61ac782a52"
+      "size": 236568,
+      "sha256": "32e4ee36945cc8087b53b1b5d281528ae7773ed28e7e91b307cb43475204b98d"
     },
     {
       "path": "review/puzzles/25-Naim-DDD.png",
-      "size": 231743,
-      "sha256": "2eaf2ac8b3485b0cb3ad3a20a5a8a810391c2100a66369f380ad270645940623"
+      "size": 238311,
+      "sha256": "2b0ffd9cdb34d5a6aca074a58aea235394520aabd425a875130d795b1462c54d"
     },
     {
       "path": "review/puzzles/26-Naim-Deskbots-1.png",
-      "size": 180056,
-      "sha256": "33ba782cd0dc3b63a4c02f8c231ca871772bf3f43f93dc3ae2aeea9ed2d97a6d"
+      "size": 184877,
+      "sha256": "4cfdb287a39a2dc7dd863d2d9e4393e8de505cba451ebc7d1e040b465336857f"
     },
     {
       "path": "review/puzzles/27-Naim-Lunalights-Zoo.png",
-      "size": 268691,
-      "sha256": "51db3e42a985da5351b3bf5ab27b813e10e3ed9d8bb276e46f5c2141d9440e68"
+      "size": 306082,
+      "sha256": "a97e457e969db8b2a481cad559633f4b30d49f8da3eae1daa2a63506df4f4b51"
     },
     {
       "path": "review/puzzles/28-Naim-Lyrilusc.png",
-      "size": 207859,
-      "sha256": "f37bf563dc1bea38f22bc7385674a8f6410c45718730e86f96f19f520339a12d"
+      "size": 210421,
+      "sha256": "cd429a000ce5734ac8d8a3a228cf63c202eacfaea398bfb69bcbcabada59acd0"
     },
     {
       "path": "review/puzzles/29-Naim-MathMech.png",
-      "size": 334254,
-      "sha256": "450c55446f82b841e99f8cc37d2cd4054353341daf51283ad8ee57f9a6d7e5c6"
+      "size": 346790,
+      "sha256": "3b09e874093b0fe9b1e7051aa566215dfe01a1b326faa37aa8ab534e96aaa195"
     },
     {
       "path": "review/puzzles/30-Puzzle-03-The-Wave.png",
-      "size": 142090,
-      "sha256": "f44c4c2aea99dd35d1b98f9f0aef1cef9e8e13dc802eb7ad21d0dd6259e80019"
+      "size": 145574,
+      "sha256": "e8d17dc9453ddd87eaa2b33e07831f065e5b0dc14d4a241affbfaed82d3ac911"
     },
     {
       "path": "review/puzzles/31-Puzzle-04-Scrap.png",
-      "size": 257054,
-      "sha256": "9a97a174c9d10a6654a12bd5d91db5cafda53f4e15ebd06831976f84d20cdf0a"
+      "size": 266205,
+      "sha256": "11a2b7b6a1393b5feb2a5cd67841e25dc985e9b3742d7f6506715b6d1648669d"
     },
     {
       "path": "review/puzzles/32-Puzzle-08-Shooting-Star-LaDD.png",
-      "size": 343620,
-      "sha256": "87f570a3805ea3176ab638a974755de5c6667228d5cb3c19ccfa5872c533404a"
+      "size": 350157,
+      "sha256": "d58b3f66cd228e8823e39519392e17fdab8229d389c0c0fbdf82ecb75080d5bb"
     },
     {
       "path": "review/puzzles/33-Puzzle-09-Shooting-Star-vs-Nordic.png",
-      "size": 273664,
-      "sha256": "f5187130fb4130c855c090f554b6616a447850e0c205a97c797436103a11c331"
+      "size": 288704,
+      "sha256": "ceeecc5e0fac827858b429d6e349256454cffd9c8c3ea37e3aeea7de81b835b2"
     },
     {
       "path": "review/puzzles/34-Puzzle-10-Penguin-Monarch.png",
-      "size": 255882,
-      "sha256": "37beb97a7f2d148e9eea190b92613fbaac17719d90d48a4ae0f9c0e8a2852d4e"
+      "size": 264050,
+      "sha256": "b127317b19ca9aeb289ad12a6f4c2077b7bb5da43f6defa6723d2aea856528a7"
     },
     {
       "path": "review/puzzles/35-Puzzle-14-Arcanite-Assault-Mode.png",
-      "size": 257797,
-      "sha256": "1dc0796c01ba7c31e72c6881d7c50f3760d54f7464fce1d3842b96e211c940e0"
+      "size": 315591,
+      "sha256": "4cd6e3aa6e8c4bd9221fef37dd971663f4d55d2a1818cff3749f92e19457cfa1"
     },
     {
       "path": "review/puzzles/36-Puzzle-16-Synchro-Dino.png",
-      "size": 251336,
-      "sha256": "2aadb57621ea8fb6e47460126b4ecbf3961c98eaba5a01736da727d4b2d2a972"
+      "size": 258919,
+      "sha256": "dad826308eca8d0423f847607973a1bbee01e2f6946e7598131219c30843038d"
     },
     {
       "path": "review/puzzles/37-Puzzle-18-Flip-the-Charmers.png",
-      "size": 298969,
-      "sha256": "f9931416fd30e23dfe8f51b7d156cc4d925f52790b7c5d50e956746fd225197d"
+      "size": 311057,
+      "sha256": "20934cc31519bc3004e8b3fe5758e9a06cb58788502a65b4584183c79aa1ee32"
     },
     {
       "path": "review/puzzles/38-RashFaustinho-06-Rex-VS-Yusei.png",
-      "size": 277150,
-      "sha256": "7539cb08234b37dd796a18853bad1181d0a10f2e05b9b72403c0936b557d1a8d"
+      "size": 283636,
+      "sha256": "4900c91e9c490740e6e571a4936173bb3dacba7221d5e448a3617032c2c82296"
     },
     {
       "path": "review/puzzles/39-Nightmare-Troubadour-Puzzle-I02.png",
-      "size": 237409,
-      "sha256": "3f7f0c88671d8251c0515b95261190c5be55eec3d7aa21c2b32fa136889b5059"
+      "size": 249755,
+      "sha256": "e0429814e10375a3b886919f1a4db4b80916acb2353f895c573b4d47f5cc9ae9"
     },
     {
       "path": "review/puzzles/40-Nightmare-Troubadour-Puzzle-I11.png",
-      "size": 206496,
-      "sha256": "179d1a4f945a335fa9fcd55314cb7fdd94ade4c28c76b0044cba50667d40d302"
+      "size": 209924,
+      "sha256": "cae5d216256c4a213915ce09948791e19296fde93b7405ea0eaffe8487a88e9d"
     },
     {
       "path": "review/puzzles/41-Puzzle-Creator.png",
-      "size": 65532,
-      "sha256": "1a37f8d0510f30d990f8dbc95a5d7ed00677b31978cf36cd6660c5f15912d9a6"
+      "size": 70735,
+      "sha256": "accdf21fd6fff2de7a027f7c5c75d0b17905fdeb50b97cb6938f95c9c29cde93"
     },
     {
       "path": "review/puzzles/42-Tutorial-Link-Advanced.png",
-      "size": 201126,
-      "sha256": "efa04531cee7091d136ca54b1840b8f52b470bb0a1b175a0229ec21aa1db6eec"
+      "size": 203922,
+      "sha256": "a5a538cc6a8ffb1aa3f37c377b8adaabbd9cf1285da6f563a3e5586a2dcffdb9"
     },
     {
       "path": "review/puzzles/43-Tutorial-Pendulum.png",
-      "size": 186546,
-      "sha256": "16547685e9fb9e3c562d35c45c8c6e7f6da8c714dedefbc4fa913a20012f5aec"
+      "size": 189187,
+      "sha256": "14d452baf2237c0ec25c087ebd72c4c07b47cb2f21dddf28cca2c3df0c0a38c6"
     },
     {
       "path": "review/puzzles/44-Tutorial-Ruling-Proper-Summon.png",
-      "size": 185303,
-      "sha256": "0274a78b684a29ea5506f713e1f03fe0afcf171b33a03c7e14619f6f230b4fb9"
+      "size": 188330,
+      "sha256": "163a9434d1f16067b09b5e06d11675d1b7f886245a8ed728393ca1e07ba8e76b"
     },
     {
       "path": "review/puzzles/45-Tutorial-Ruling-Ultra-Poly.png",
-      "size": 163354,
-      "sha256": "0b84f5e71ebc2a4f621ba299f225e9f2a90a82f87d6485c96a745caf94593f99"
+      "size": 166243,
+      "sha256": "1fe8e3e98499f2d3eb30d3e82f05a29bba644e0a79f161b060f7b8675ce799fb"
     },
     {
       "path": "review/puzzles/46-Tutorial-Ruling-Z-ARC-Materials.png",
-      "size": 181492,
-      "sha256": "972383a95c2a343cadb17ef24757048546fc1f1cd15b881cb1e8e0f99a6a10c9"
+      "size": 184218,
+      "sha256": "557b11923b1f8852153a248863f96f6b3367fe935aedb7b64c91c714a153dc5b"
     },
     {
       "path": "review/puzzles/47-Tutorial-Synchro.png",
-      "size": 213853,
-      "sha256": "3258f47fafcd1f0fa728b86874d9d04cb1a089866b416f15840306184638d64c"
+      "size": 217132,
+      "sha256": "b9413bfbb93efbb989fa19e7280223cc7a4df82decbfff2d04d125b335616dd8"
     },
     {
       "path": "review/puzzles/48-Tutorial-Xyz.png",
-      "size": 203254,
-      "sha256": "b58c2d076b116f1a92507e2b523c6a36af4ed70680cd3c450f2c049a7dc6aef3"
+      "size": 213756,
+      "sha256": "4cffa4451d5ab803bbcdfb228f77b3f20166db6b68f883d7e2861c3107cb6d30"
     },
     {
       "path": "review/puzzles/49-WCS2006-06-Achilles-Heel.png",
-      "size": 247061,
-      "sha256": "bec9155da38236a7a25d49c3947e1c44d895de18280c73e9c3ce74ff579967f5"
+      "size": 260368,
+      "sha256": "cb4a323b943ea19da7dcf51d23e8bb387ec3ea01795b3a983e11cd236461c66b"
     },
     {
       "path": "review/puzzles/50-WCS2006-08-Eternal-Flame.png",
-      "size": 219981,
-      "sha256": "1349f5e622ff602975c69b8deb60085868a5a4a939d1487d04650e8226214e1f"
+      "size": 228881,
+      "sha256": "b360a326e949e61958d892a6160a4fd5a0248a4834fdefcae8de483c447618b3"
     },
     {
       "path": "review/puzzles/51-WCS2006-09-Frog-Family.png",
-      "size": 273360,
-      "sha256": "06b4a8512aa8893da45419ae0c003fc1b01d2f9b6c32de73e08b4963dbed2818"
+      "size": 277776,
+      "sha256": "c79e89dbbd2caaa5f7303db14ef4356f0b4790f9c3d69f614002811b27b92611"
     },
     {
       "path": "review/puzzles/52-WCS2006-10-Equip-Power.png",
-      "size": 234317,
-      "sha256": "6128db56ccc05ef40e8ea7c731a45d3764d2420fc2e216f4f82c1c9417cac052"
+      "size": 254724,
+      "sha256": "f01c90d54acab97a4159f90d80abcecd7093d0e8b34923466b700ac1f353e809"
     },
     {
       "path": "review/puzzles/53-WCS2006-12-Anteater-Hunter.png",
-      "size": 203194,
-      "sha256": "1fb27c187579ed3120fa4ca8e698e64fc564fa70c192addc59d1480d1a5b5e6e"
+      "size": 214089,
+      "sha256": "6431670d65366202a359d7480840eb6baaae9d6b1105ae565efeacb68d38af0c"
     },
     {
       "path": "review/puzzles/54-WCS2006-18-Wall-of-Zoa.png",
-      "size": 223703,
-      "sha256": "f02fd89fd5b5a50fc37e3e0401413c8d791b80d9417b2570fb0d16ac065bf5dc"
+      "size": 249955,
+      "sha256": "c9cbd80f67ee298dc294489870d1de6df5616a10f5f321c33980402af52d3ba7"
     },
     {
       "path": "review/puzzles/55-WCS2006-22-Commence-Counterattack.png",
-      "size": 253694,
-      "sha256": "916d65855a3c2f9daeb1da3c8bd24e5a35a9ebefd72f9fca30a85febf81962ac"
+      "size": 271849,
+      "sha256": "15cb0c8629dfe1db29c088ba3671de39fb26ad2b6519f851b74c521e7f4f48ae"
     },
     {
       "path": "review/puzzles/56-WCS2006-24-Dragon-Killer.png",
-      "size": 397288,
-      "sha256": "c184b4a35b28a314d1a52696f551df28895753bf4d6776a68f4245fc32f63040"
+      "size": 451264,
+      "sha256": "de3140fb7bcb3745ee0aa4b96557c8575765356f691753b0454e6bdd3fa35f7a"
     },
     {
       "path": "review/puzzles/57-WCS2006-25-Battleship-Down.png",
-      "size": 238812,
-      "sha256": "e584a6418652d9d497051d6da149ee441c26dd7caa969631013cc951581fdac8"
+      "size": 245496,
+      "sha256": "45b4478d5697b7517a868f5b5a5628ad52bb173bbec084c1fda50f28f8cfb7ea"
     },
     {
       "path": "review/puzzles/58-WCS2011-Download-Puzzle-03.png",
-      "size": 168354,
-      "sha256": "056bc4c7aef6fda99c201ffdf00a47fc02cd7eab116b8b0ff26e873139744638"
+      "size": 177964,
+      "sha256": "4d00c18ac0887fea3f73649596178f0578a6d582854a36411c88a7c28c433611"
     },
     {
       "path": "review/puzzles/59-WCS2011-Download-Puzzle-04.png",
-      "size": 287549,
-      "sha256": "1867b1facd152bf9a05c5b249ab089dbf445fcc03dbcaeb1c43b7f50ae38fea2"
+      "size": 386463,
+      "sha256": "ea10c0bf6281ac338893b84502de097b1b1990e1458d99dfec8237ba089fbae2"
     },
     {
       "path": "review/puzzles/60-WCS2011-Download-Puzzle-05.png",
-      "size": 224209,
-      "sha256": "b3502fc0ad4366ed17b2a4233d2e1209d4d95d4c898020619540aed4f1598266"
+      "size": 225881,
+      "sha256": "cfc164936ad8c2e844a675cc911a24fb0cd91376ddcb13eeb73e6c989e4535ce"
     },
     {
       "path": "review/puzzles/61-WCS2011-Download-Puzzle-06.png",
-      "size": 296954,
-      "sha256": "ebc4ab24a45b7f42c8b3dbbd88e9c251117a1a52e929a32e6d20eb85cccf357c"
+      "size": 371723,
+      "sha256": "ef011e89a362a4e2174358c7853d156f072c3ba43f35eb78c6ad342ca1282d29"
     },
     {
       "path": "review/puzzles/62-WCS2011-Download-Puzzle-08.png",
-      "size": 358398,
-      "sha256": "c0eef84e97903cc61f9611b739af4d148875193f0d17ba8f99f0f551b31b955a"
+      "size": 406417,
+      "sha256": "186ace2cddec87bfdec4079fafe72e2023e4b1b4597082a3bdf6d94f450bbe43"
     },
     {
       "path": "review/puzzles/63-WCS2011-Download-Puzzle-10.png",
-      "size": 279871,
-      "sha256": "45291ac0d16f68a12632c9a8420d73e51c3c2aceb0b7c5cb3c6fabcf321c6235"
+      "size": 291455,
+      "sha256": "b46194335e8d90c755ae3dd471287e13dd8967c5897674d9fc5317b157f9e233"
     },
     {
       "path": "review/puzzles/64-WCS2011-Download-Puzzle-11.png",
-      "size": 229235,
-      "sha256": "76e97e9865015c117c546e2e455ef8204e9dd99a3e9745bdfb2c78854549fe05"
+      "size": 240400,
+      "sha256": "c9c8fa026e3284ab83faee501d2e02db5c1bf582078370a2d9e359369dd8fa82"
     },
     {
       "path": "review/puzzles/65-WCS2011-Download-Puzzle-12.png",
-      "size": 254655,
-      "sha256": "9bfbc8beede6508cb17461047860ce805d08fd703710716446d30b5e1e2729dd"
+      "size": 284225,
+      "sha256": "9ba6aca97601b5bc7fd4341e83fb3305bd983295dfba6cb7e95112c5d555bfb0"
     },
     {
       "path": "review/puzzles/66-WCS2011-Duel-Puzzle-05.png",
-      "size": 204445,
-      "sha256": "349d9946ac6ae852511750ad9ad82c9bd737500d42ba7054bd96a5ec1553168f"
+      "size": 211458,
+      "sha256": "2b865a462f93a07c135e3a4d2e4e48a677e4eb9aa294517ab160af41301c1362"
     },
     {
       "path": "review/thumbnails/construction/01-deck-721313-controlled-corruption.jpg",
@@ -580,333 +580,333 @@
     },
     {
       "path": "review/thumbnails/puzzles/01-Naim-DuelLinks-DuelistsChallenges-2-until-08-Feb-2020.jpg",
-      "size": 9107,
-      "sha256": "c3a24d2c9864ebca378757501d2e5e24411d6cb70f54932c8f6ceb2017390117"
+      "size": 9925,
+      "sha256": "bc150ebf61a6c7d41c8342392d5302fb7ed5c2aeeb37eea8a15113e8d36cbcbb"
     },
     {
       "path": "review/thumbnails/puzzles/02-Naim-DuelLinks-DuelistsChallenges-3-until-08-Feb-2020.jpg",
-      "size": 8917,
-      "sha256": "74d500061cd24706abd9effe6c11639d6775e1f3ce2b65a1df36bd4743bad6bd"
+      "size": 9746,
+      "sha256": "73ad3ca0d68ab8846c9e7b6e7cb8764ea0849293f35f9faa32e5016ec2521085"
     },
     {
       "path": "review/thumbnails/puzzles/03-Naim-DuelLinks-DuelistsChallenges-5-until-08-Feb-2020.jpg",
-      "size": 9136,
-      "sha256": "f4bb492c5c9281f2f92200be2a40f75c8a3562e0d9330f01d58a03af7480a426"
+      "size": 9945,
+      "sha256": "e8d280121845149fe6f5ece66b05d6af5a5d58e2f26cb4c50bc4a95a69f20c25"
     },
     {
       "path": "review/thumbnails/puzzles/04-GX-Spirit-Caller-B10-Spark-Batteryman.jpg",
-      "size": 9373,
-      "sha256": "40d888d4a6112bfb6b7e49ba17a3e69674cbaabf70b31ab7c069c0cf13de3a71"
+      "size": 10289,
+      "sha256": "a3f9b41dc6c7b893fea083bf7e57851a6c177f00cc34ed641eed148ae513b2cf"
     },
     {
       "path": "review/thumbnails/puzzles/05-GX-Spirit-Caller-B13-Testing-Your-Skills.jpg",
-      "size": 9075,
-      "sha256": "aa275aaba2486bbc7bb595345c1e7bd957fe7761d9b2fa2bf842e917d4c226ab"
+      "size": 9939,
+      "sha256": "0b890a0c2625c06cb82983f6f72f8cffc9bc4fcc1ff1300f2a5b9053bbe4752c"
     },
     {
       "path": "review/thumbnails/puzzles/06-GX-Spirit-Caller-B15-Wild-Vigor.jpg",
-      "size": 9208,
-      "sha256": "a395be340d3fcf0ac4ce3db1aedd919b1cb48fced86022ee42f82a1144f1d061"
+      "size": 10107,
+      "sha256": "8a99e7063ec4fb3716f257bcc285e93cfd1c737d6cebdc590cabd07e4d51b07c"
     },
     {
       "path": "review/thumbnails/puzzles/07-GX-Spirit-Caller-I08-Warm-Up.jpg",
-      "size": 9813,
-      "sha256": "0efb014d677bc9e337c79ed9c208e9172293853ca5c26cfbec595ba56922b5da"
+      "size": 10750,
+      "sha256": "f407a7ed83807ea32af50f5edfd3e00a295c5313174fb0d5469cc7b38b8c5f18"
     },
     {
       "path": "review/thumbnails/puzzles/08-AlphaKretin-02-Set-Rotation.jpg",
-      "size": 8845,
-      "sha256": "a6473f0f9ec116c4ba6b60071ef2a5326822e3343c65bcab2f13e1e519f66465"
+      "size": 9582,
+      "sha256": "aaaa3909c7a568a6b171c7fe3da99f2b90c39c893df09942f906a7d14072700d"
     },
     {
       "path": "review/thumbnails/puzzles/09-AlphaKretin-06-Quik-Fix.jpg",
-      "size": 9252,
-      "sha256": "2b8bc022fd8cc9dc53f8f6e29258e750fc1d13ff041b8ec0b4083098afa436ca"
+      "size": 10136,
+      "sha256": "765017baeb894026320e5b169f5ad18f764f13be8f5e44b83feb3e980e665213"
     },
     {
       "path": "review/thumbnails/puzzles/10-AlphaKretin-12a-Cyber-Dragon-Max-Attack.jpg",
-      "size": 11310,
-      "sha256": "c1cb3d8ddf558cb181904054495389837d7c1be05115827253a6d4c169cc73e2"
+      "size": 12389,
+      "sha256": "02362567ca7918003edbc8f05b72fe0998318e8813718ff4bce0a8f77bcfa188"
     },
     {
       "path": "review/thumbnails/puzzles/11-AlphaKretin-12b-Cyber-Dragon-Max-Attack-Tag.jpg",
-      "size": 12219,
-      "sha256": "e246a43886b0c2b33b2d47464d44f22c703b43ff25494d443c11a836a3d86b38"
+      "size": 13548,
+      "sha256": "ecfc25f8663d8ba7c76fcd26c71dd26fe1c0e884681391102d3386a6e0e6d4a3"
     },
     {
       "path": "review/thumbnails/puzzles/12-AlphaKretin-13-The-Swarm.jpg",
-      "size": 8421,
-      "sha256": "15e7a12aac28f87b0dba134e4e623238352b8060151489859bc727c80b321f6d"
+      "size": 9182,
+      "sha256": "9f42bf0044ae31214182c543466ec37fc73744f01678435976e15bd84ae65236"
     },
     {
       "path": "review/thumbnails/puzzles/13-Andre-Kuriboh-03.jpg",
-      "size": 10347,
-      "sha256": "831831f1790d4c22826f0d876c12719ba3e8e04ec95dc0e64e19d6390cb5d7dc"
+      "size": 11418,
+      "sha256": "6bb340f96b22a8fb3c674ff5404903516c3e8a16211b663f245d3422f93c8c52"
     },
     {
       "path": "review/thumbnails/puzzles/14-Eroldin-01-Mastering-the-Red-Dragons.jpg",
-      "size": 9267,
-      "sha256": "b6b205be71d5d1cfc6ef2408584f26625d4ff9821b9c70dab9c058f297accc0f"
+      "size": 10107,
+      "sha256": "6b1256495a628645947221f8fa1984872bd84e58425ab813e4d54f370746de8d"
     },
     {
       "path": "review/thumbnails/puzzles/15-Furtie-Hubo-01-Dark-Synchro.jpg",
-      "size": 9259,
-      "sha256": "d534a2954c710b6d94b1efc1dcc7848ac13b6d79dc516275501e0bd6bac64d5c"
+      "size": 10043,
+      "sha256": "a0aec50d0a9fd44b65c42296e0d6d0ab4da45a39a89ac206a4dd284f476f771b"
     },
     {
       "path": "review/thumbnails/puzzles/16-Furtie-Hubo-02-DDD-Remastered.jpg",
-      "size": 9707,
-      "sha256": "472f95b580f1521c0ca8e83358bd22a50bac4711db3150d8ea8ec93c4f41003b"
+      "size": 10651,
+      "sha256": "4b4914bbb2082987ed300c19a312aa30f7f74b6a3b619832913c6e036c85c29a"
     },
     {
       "path": "review/thumbnails/puzzles/17-Furtie-Hubo-05-Infernity.jpg",
-      "size": 10148,
-      "sha256": "b3b868c89dcf7338e5fa6fb2d21ed6e6d2d06d6759af2698553025cd7cc731bd"
+      "size": 11117,
+      "sha256": "7313629836a7cb2e5b18d1160a140cebcaf04666634c58f31cfb528b4a306192"
     },
     {
       "path": "review/thumbnails/puzzles/18-Furtie-Hubo-06-Inzektor.jpg",
-      "size": 9905,
-      "sha256": "7a929d8f5f942b14b4e2f49a21ac2b5a9270fa8349b319b8790fdbd3991003da"
+      "size": 10826,
+      "sha256": "7babcdb5a4f4f71f5bcbf5e6812ace525385d5aceaff84aa2e9200157ad80cc2"
     },
     {
       "path": "review/thumbnails/puzzles/19-Furtie-Hubo-07-Kozmo.jpg",
-      "size": 10132,
-      "sha256": "1dc993154fad7d8f78ee1cb3dfdc199373661fa6f332123a2fbeea26b4adfec5"
+      "size": 11048,
+      "sha256": "4ba30e3a057fadb614efd117265224b58cd39d9afb30ae6281b08bb2c7f03c45"
     },
     {
       "path": "review/thumbnails/puzzles/20-Furtie-Hubo-11-True-Metalfoes-Kozmo.jpg",
-      "size": 9394,
-      "sha256": "621af910f70c8465da36ee31b8367894b14121a30ddb076fe7890cbc9656f67f"
+      "size": 10225,
+      "sha256": "835fb5862e350c9c6916cc7e0edfddc746de86af19b1dc622c265a45ed5f2ed5"
     },
     {
       "path": "review/thumbnails/puzzles/21-Furtie-Hubo-14-Nekroz.jpg",
-      "size": 9162,
-      "sha256": "fc439c2b6324aaf31cc8a1edee3e39b3b62d24207b783e8058071712024af849"
+      "size": 9919,
+      "sha256": "36538cfac9198f843fc1551970efb1240573c573460958c0d4e70a7d531a866f"
     },
     {
       "path": "review/thumbnails/puzzles/22-Furtie-Hubo-16-Lunalight.jpg",
-      "size": 10315,
-      "sha256": "2e18c69eeacce47a184aa32efaabe51dd6ccc4fcbe4a8bced96f6bf67a787d62"
+      "size": 11323,
+      "sha256": "77d5371772f5e2b05f73508968363445dab529aa8992434c02a7dde5a8747bb6"
     },
     {
       "path": "review/thumbnails/puzzles/23-Furtie-Hubo-17-Atlantean-Mermail.jpg",
-      "size": 10151,
-      "sha256": "a936d4a33997362c42d54414f718aa594d7d33f3bf0948c3e017a8ee34cd78d7"
+      "size": 11117,
+      "sha256": "94748175b77959f92d5d967e942d88d0617271512dfe38e47eff48dd84f2d6f5"
     },
     {
       "path": "review/thumbnails/puzzles/24-Gideons-Unbreakable-Board.jpg",
-      "size": 9078,
-      "sha256": "fcd9bb9db503eba460fc62b219551eeb3710d00e5a49f4a719c49db9d2e23712"
+      "size": 9880,
+      "sha256": "d2ad175df3037222046fdb3ef6476535c06b57124a57d5abd2bf5a1447a39f13"
     },
     {
       "path": "review/thumbnails/puzzles/25-Naim-DDD.jpg",
-      "size": 8716,
-      "sha256": "d084bf70db8cae751b5e1091017dfa06eb9d71d56b31574f13833cc65774207e"
+      "size": 9483,
+      "sha256": "a11d918a46883d0ddca35b4c5a9fbc1a4ab83536d01428dd43a01150d2a070b7"
     },
     {
       "path": "review/thumbnails/puzzles/26-Naim-Deskbots-1.jpg",
-      "size": 8778,
-      "sha256": "0cef24db35d6654cd83c02c4073212d9a179cbd43c4aa7da2f08d08e7c520d33"
+      "size": 9554,
+      "sha256": "f6abc89ef82d1702dc7a408125e5a95c3733db1398a90fe49a33649cfe632361"
     },
     {
       "path": "review/thumbnails/puzzles/27-Naim-Lunalights-Zoo.jpg",
-      "size": 9580,
-      "sha256": "b6e305b90b57cb3b97932d9bcefef2bf6dc46a0d8d39fd582ab7365d93807e12"
+      "size": 10457,
+      "sha256": "08d772eb4d6236314710745cc06e485ac3f487d4e445e97511cfe81abb052f37"
     },
     {
       "path": "review/thumbnails/puzzles/28-Naim-Lyrilusc.jpg",
-      "size": 8530,
-      "sha256": "0c45b792ac8eba5cd544b95b8df47706199d7e71f13fda8397aa52342dfdc4d9"
+      "size": 9271,
+      "sha256": "7fd85f90f544b8c72132036a86933eb92e7c30019300f4802e2b4abee1445a03"
     },
     {
       "path": "review/thumbnails/puzzles/29-Naim-MathMech.jpg",
-      "size": 9410,
-      "sha256": "733e366e55e858acabb0cb03f421e031f90985a84da05d948edc8d39c7db94e9"
+      "size": 10260,
+      "sha256": "9bc6daea2e7a8d6ca0a814d7768397a7ca652d927fcb72e424ec6ca26753ba6c"
     },
     {
       "path": "review/thumbnails/puzzles/30-Puzzle-03-The-Wave.jpg",
-      "size": 8212,
-      "sha256": "852b3c317ba30203b3ca507c070ab66f2b9ee04d9b760607294848e68ed56116"
+      "size": 8905,
+      "sha256": "a0f4cc5ef306fc008b7e87fbb218c5bf5acfb03b81876fd8d548ec893a6b079e"
     },
     {
       "path": "review/thumbnails/puzzles/31-Puzzle-04-Scrap.jpg",
-      "size": 8932,
-      "sha256": "c4d864f76b5c0a55130dcd2ac0995fae8dc4bb69fa7d3d8311c9570d9c08f273"
+      "size": 9758,
+      "sha256": "b10b913a529e5316a201f85cceac4295cbe4ddc0739821f73db0207f77394d1b"
     },
     {
       "path": "review/thumbnails/puzzles/32-Puzzle-08-Shooting-Star-LaDD.jpg",
-      "size": 9785,
-      "sha256": "b9f86f78264a92ca39687dcb710282fc46ae5059c9daa34e8c332887cf5c34e5"
+      "size": 10704,
+      "sha256": "bbdce4663fffea9b6224a50d8e23e360ca042dc21c22f32e299a2c45f4a218dd"
     },
     {
       "path": "review/thumbnails/puzzles/33-Puzzle-09-Shooting-Star-vs-Nordic.jpg",
-      "size": 9708,
-      "sha256": "9bc7ee9b12a7e6912da432a812b7a2444942c21b900a222d4553e4bfd006413d"
+      "size": 10551,
+      "sha256": "d677b6f24d6ec6be4030d0ee98f6f1cd7f93f53a2a1e73180456a644567a5f20"
     },
     {
       "path": "review/thumbnails/puzzles/34-Puzzle-10-Penguin-Monarch.jpg",
-      "size": 9664,
-      "sha256": "d93757db39fcaed2c1909d8becb2c01dd70cfd5acec99a25b411bc98d7b96a8e"
+      "size": 10539,
+      "sha256": "06db8b1723b93bb5e4ad57c03b95a00a0194ac9d46fcef1e540bbd14dda08835"
     },
     {
       "path": "review/thumbnails/puzzles/35-Puzzle-14-Arcanite-Assault-Mode.jpg",
-      "size": 9692,
-      "sha256": "5adb3eb0e2311bf8db1683adcde8885eba3116b81424b21b91f0fa1442e46f9c"
+      "size": 10636,
+      "sha256": "574631b0707db512a949dcd98ff3f58076bb8821380cff65ab07f63380b61f1a"
     },
     {
       "path": "review/thumbnails/puzzles/36-Puzzle-16-Synchro-Dino.jpg",
-      "size": 9082,
-      "sha256": "5dde77e972e985e24a3a501f1ce78714266032fa2d5ebdd2d65816f920e4b5fe"
+      "size": 9878,
+      "sha256": "bf55e6b0d5bbc07bb6807ad22c3dd7ce942c513c8fc1663adac0e9c38b0411d5"
     },
     {
       "path": "review/thumbnails/puzzles/37-Puzzle-18-Flip-the-Charmers.jpg",
-      "size": 10137,
-      "sha256": "2a4151cf5e3cdcd99beb843479d5d45ce77f89aaca3cc40c736a2983badb4e9b"
+      "size": 11081,
+      "sha256": "0e5c9566a6bac54e19e40f0651f890a7c7a216a2e7cc2035182ff16704e8f6cb"
     },
     {
       "path": "review/thumbnails/puzzles/38-RashFaustinho-06-Rex-VS-Yusei.jpg",
-      "size": 9484,
-      "sha256": "d0c51708b0b8c4204fb68280f79fe61986f4add61f5a5994cc546507db873312"
+      "size": 10418,
+      "sha256": "b361198205f3c558bdea3eb009e07935d7e1dff93e08808edaf33a6b536e3075"
     },
     {
       "path": "review/thumbnails/puzzles/39-Nightmare-Troubadour-Puzzle-I02.jpg",
-      "size": 9191,
-      "sha256": "13e5f31559cf6204f4af0e31fc0758bde4000db79c1c27333bfba2a664a34479"
+      "size": 10176,
+      "sha256": "83d40bc858a88581e6ec8bfe28ddf34ba8907350247898efe107747fb5480d76"
     },
     {
       "path": "review/thumbnails/puzzles/40-Nightmare-Troubadour-Puzzle-I11.jpg",
-      "size": 8983,
-      "sha256": "070bd30ab11494d4eb10cfd3f926758ab6c6ba2d220d83a3646ab93f15f7519a"
+      "size": 9858,
+      "sha256": "9d36df71314ad530a51b1cecd0b31f8901529614afe0f86caa341b0873e0fb8f"
     },
     {
       "path": "review/thumbnails/puzzles/41-Puzzle-Creator.jpg",
-      "size": 8022,
-      "sha256": "668921cf7749431c658c011177d0589243c65b7419344b6c32cba6cff8b3984e"
+      "size": 8771,
+      "sha256": "8b4e53aae0572811878c17ceb1eb302fb202a0697a6584854c4534370392e75d"
     },
     {
       "path": "review/thumbnails/puzzles/42-Tutorial-Link-Advanced.jpg",
-      "size": 9421,
-      "sha256": "8effd08ec74882ef8622aa7702b2eacdea142e176da93293cb4b8bd073577776"
+      "size": 9798,
+      "sha256": "170ec0ee5da5b5af3cb5643b7c3308abfed67029ca98cb9908a9febd54e726f9"
     },
     {
       "path": "review/thumbnails/puzzles/43-Tutorial-Pendulum.jpg",
-      "size": 9336,
-      "sha256": "bacb02f7fcf5f5ab9af632c7debadd3067d359257bf801ab1126f8f25f80ee32"
+      "size": 9741,
+      "sha256": "a51735858afcdfaf92ad84e479e0308cf6f127a9caa2d4a679c01e6ca8abb0f6"
     },
     {
       "path": "review/thumbnails/puzzles/44-Tutorial-Ruling-Proper-Summon.jpg",
-      "size": 9383,
-      "sha256": "306d7cf619eb62429f3bb5738e16974db93f7a4719a7fe872d9880125739acb5"
+      "size": 9768,
+      "sha256": "b99b502253439fc5ab89403f6dc2830e35561d046d938f1e36f716c160b818f2"
     },
     {
       "path": "review/thumbnails/puzzles/45-Tutorial-Ruling-Ultra-Poly.jpg",
-      "size": 8442,
-      "sha256": "0dd30de84cdc1036d38547c01ed5de5618ec94a2f1605d55f702486c56a43a67"
+      "size": 9241,
+      "sha256": "742a09323b77bd5337ece47dcde99658a25aa997702ebd050a1440a7fdde32e4"
     },
     {
       "path": "review/thumbnails/puzzles/46-Tutorial-Ruling-Z-ARC-Materials.jpg",
-      "size": 8811,
-      "sha256": "3278bd480b2cbaf3f1c4ffb44ddfc4305af1da7848c333b1ae20901158ffc15c"
+      "size": 9504,
+      "sha256": "f7a6a89b3a0caabf520d7385366be7e2495bdf2ce60c108bcf9e70779855350e"
     },
     {
       "path": "review/thumbnails/puzzles/47-Tutorial-Synchro.jpg",
-      "size": 8709,
-      "sha256": "22a3b5c65b9989eec06fb565aef2bb78d236130d5beb77f6d57d46da337781d0"
+      "size": 9544,
+      "sha256": "0e36dc12007bead042781da6903d0076fc52e8e3ef98babfdf440c1c25b876d0"
     },
     {
       "path": "review/thumbnails/puzzles/48-Tutorial-Xyz.jpg",
-      "size": 8558,
-      "sha256": "17613e693c24d900ba06b423432cd83f598fe27524f66e1b84f2f6e9ecc3ce2c"
+      "size": 9417,
+      "sha256": "db8313d74bcab340c2903ff5d5176087ba13038a9ac1222b4d4b736176341a85"
     },
     {
       "path": "review/thumbnails/puzzles/49-WCS2006-06-Achilles-Heel.jpg",
-      "size": 9018,
-      "sha256": "2ee7592f8365bc981d5fb2d00978a7a9be1505efe54bd6dbb78915364b996af3"
+      "size": 9825,
+      "sha256": "0cf61428d6b492e7bdefb8d4ab7f26ad04da5a8dffb47f25d38bfc486b60af7f"
     },
     {
       "path": "review/thumbnails/puzzles/50-WCS2006-08-Eternal-Flame.jpg",
-      "size": 8908,
-      "sha256": "fc412e91b89dce5317bd44083cf68b49edcff3c0a767e4007c153a4863862935"
+      "size": 9749,
+      "sha256": "8c3e8d08d4ba4f7d5ac050b222aaa452c1d7ba1936f66671864da72606512a70"
     },
     {
       "path": "review/thumbnails/puzzles/51-WCS2006-09-Frog-Family.jpg",
-      "size": 9252,
-      "sha256": "18a6cfaaa64c431d2db8cfeeb3d9d8d6fe0eeeb70f156b97b6b2ec32b4a98c4b"
+      "size": 10183,
+      "sha256": "0f6811f61b6e9837f1d6f1d05b51a4cdc81482d1962e5edd77730adb7b0b8abb"
     },
     {
       "path": "review/thumbnails/puzzles/52-WCS2006-10-Equip-Power.jpg",
-      "size": 8994,
-      "sha256": "c0af564d09ac23e347d11648e7eb8f7903630cd0111b6e9763eec45eac07cd00"
+      "size": 9935,
+      "sha256": "302d11bb30ea25bb0ffc65555de01f83d1bb62af6c5f04fe21840166843cd457"
     },
     {
       "path": "review/thumbnails/puzzles/53-WCS2006-12-Anteater-Hunter.jpg",
-      "size": 9009,
-      "sha256": "9f126e6ebc2bcf425d7751ff650989785aab47e1a3ef03e9a886d59f0af6cc54"
+      "size": 9875,
+      "sha256": "d844681ff9fefabdbd81f2145fc96a8f3b3e2581405a4a3ab4b290295e785cda"
     },
     {
       "path": "review/thumbnails/puzzles/54-WCS2006-18-Wall-of-Zoa.jpg",
-      "size": 9353,
-      "sha256": "7735d68df8dd3866aa25375a7128a2d423dad01a4853c1751cc7096a9b9a28b0"
+      "size": 10425,
+      "sha256": "790d664884d042c9c89ab523f9a651b4e1e20d407d205f0e35fd6478ca5bc4b8"
     },
     {
       "path": "review/thumbnails/puzzles/55-WCS2006-22-Commence-Counterattack.jpg",
-      "size": 9714,
-      "sha256": "075b8d11309b8a4055c9d0a33efc3681dbd4ab4c558422071e8d84dad2611fc9"
+      "size": 10746,
+      "sha256": "902f6ea1787333ee312e45d6b9501b764ce61aaeeec76587c04613c928f31d28"
     },
     {
       "path": "review/thumbnails/puzzles/56-WCS2006-24-Dragon-Killer.jpg",
-      "size": 10575,
-      "sha256": "4d9c801085e28ac23d211eb85bdba600634ab1fc58ff73453cd6f78160cc2e4c"
+      "size": 11715,
+      "sha256": "72bdd4ed888cd70c23ed673c9072646f0a520111ba160f2fe6b26a8bd342f53b"
     },
     {
       "path": "review/thumbnails/puzzles/57-WCS2006-25-Battleship-Down.jpg",
-      "size": 9720,
-      "sha256": "7fe4a60742cdc58f9fc4348993763ef99808147a397be5c5e463adcde3a7c6f7"
+      "size": 10641,
+      "sha256": "72d6740f5ebf29c665ec562cbf4ae53f77dd736e0a1dbfc8e652ca2814caaded"
     },
     {
       "path": "review/thumbnails/puzzles/58-WCS2011-Download-Puzzle-03.jpg",
-      "size": 9100,
-      "sha256": "7980b6552c3c1bd6b6b9f7fd924295834d0db4988c88961e87bdfb7344a90d2d"
+      "size": 10027,
+      "sha256": "8e213dfa27a766d093e95ca71bc14b421af4b33a6ed542e2192bf36f86f685e0"
     },
     {
       "path": "review/thumbnails/puzzles/59-WCS2011-Download-Puzzle-04.jpg",
-      "size": 10384,
-      "sha256": "d62d03b1b4c909da82a7f43b27b1ad3ff5b23192af62d62395c452a348871001"
+      "size": 11546,
+      "sha256": "fa431d6fb8c900c630f8ece1f80600ad2d6dd8c8c565e414ebcb2896b41e35ec"
     },
     {
       "path": "review/thumbnails/puzzles/60-WCS2011-Download-Puzzle-05.jpg",
-      "size": 9060,
-      "sha256": "f0ad5465661cd9ac7f5fefad6f7a0dec3ece30de2cb293bc14903474c95d96ad"
+      "size": 9811,
+      "sha256": "e8bce2b31fc4182c75f682cfc368eb1e961a2cc2bb7834249847e4e1a6a4466a"
     },
     {
       "path": "review/thumbnails/puzzles/61-WCS2011-Download-Puzzle-06.jpg",
-      "size": 9873,
-      "sha256": "7e29e45181546a8d3c23fe592e64428f6f60125c35b337f82acb9d704903b7d9"
+      "size": 10800,
+      "sha256": "26e2e4715e4c7b2a65365e6104372a7ffa9ce8cc0bd5b420f14feb63e9c80cbb"
     },
     {
       "path": "review/thumbnails/puzzles/62-WCS2011-Download-Puzzle-08.jpg",
-      "size": 10321,
-      "sha256": "3b39fa0f982991f638f097abd889462919e8c07702c02b8e490a442800d3c46d"
+      "size": 11397,
+      "sha256": "dbc2a472926dc6083384c903b58d5c4871f6a4c9242a0d0ad3cf1aab50feda1c"
     },
     {
       "path": "review/thumbnails/puzzles/63-WCS2011-Download-Puzzle-10.jpg",
-      "size": 9529,
-      "sha256": "54d4e03f342294d37eefcbd48cd6b17ae2cbf1096d0bf0351fc4b18f74a9785f"
+      "size": 10454,
+      "sha256": "16642bd45b9a96bbeb4035019efc085184ca14acade9038352b69c522f7b21f1"
     },
     {
       "path": "review/thumbnails/puzzles/64-WCS2011-Download-Puzzle-11.jpg",
-      "size": 9293,
-      "sha256": "8b90f7eda8a39b71d0352b244c0a87df9b5ac9d3c24b8aa7ebc0909068be43de"
+      "size": 10294,
+      "sha256": "fb9edf1662a25013ffea374d1ff82f7f38e231ebe23005abf3a4674371505a10"
     },
     {
       "path": "review/thumbnails/puzzles/65-WCS2011-Download-Puzzle-12.jpg",
-      "size": 9465,
-      "sha256": "eaa0a3e1529bbde37892e25fe27655e443dc44512f0c06819c01a341d18a075b"
+      "size": 10397,
+      "sha256": "b9e44176e9df5f9c2752fa0e07280d36fb75bf2e0e3dfcce190a82b4ed2424af"
     },
     {
       "path": "review/thumbnails/puzzles/66-WCS2011-Duel-Puzzle-05.jpg",
-      "size": 8925,
-      "sha256": "983cb8a529df8cb1f2ff5585ebbf77b676187171ca2538a892a8cd5f93f29189"
+      "size": 9814,
+      "sha256": "cefb595c699584bd09a0704001fc7008354cd22dbfd8c366c205a91377f65017"
     },
     {
       "path": "review/thumbnails/understanding/01-u-cs-001-ash-semantics-tcg.jpg",

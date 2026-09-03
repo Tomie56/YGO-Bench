@@ -142,6 +142,10 @@ def build_review_catalog(manifest_path: Path) -> dict[str, Any]:
             )
         if state["has_custom_effect"]:
             issues.append("contains custom Effect")
+        if state["overlay_call_count"]:
+            issues.append(
+                f"dynamic Overlay calls not statically resolved: {state['overlay_call_count']}"
+            )
         relative_path = str(state["relative_path"])
         items.append(
             {
@@ -166,7 +170,7 @@ def build_review_catalog(manifest_path: Path) -> dict[str, Any]:
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
     return {
-        "dataset_version": str(manifest.get("dataset_version", "pilot-review-v0.1")),
+        "dataset_version": str(manifest.get("dataset_version", "pilot-review-v0.2")),
         "items": items,
         "counts": manifest["counts"],
         "asset_snapshot": {
@@ -202,7 +206,7 @@ class ReviewStore:
         self,
         path: Path,
         item_ids: set[str],
-        dataset_version: str = "pilot-review-v0.1",
+        dataset_version: str = "pilot-review-v0.2",
     ) -> None:
         self.path = path
         self.item_ids = item_ids

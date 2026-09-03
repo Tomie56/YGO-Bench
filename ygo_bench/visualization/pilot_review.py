@@ -28,6 +28,19 @@ LOCATION_NAMES = {
     "LOCATION_EXTRA": "Extra Deck",
 }
 
+POSITION_VALUES = {
+    "POS_FACEUP_ATTACK": 0x1,
+    "POS_FACEDOWN_ATTACK": 0x2,
+    "POS_ATTACK": 0x3,
+    "POS_FACEUP_DEFENSE": 0x4,
+    "POS_FACEUP": 0x5,
+    "POS_FACEDOWN_DEFENSE": 0x8,
+    "POS_FACEDOWN": 0xA,
+    "POS_DEFENSE": 0xC,
+}
+FACEDOWN_POSITION_VALUES = {0x2, 0x8, 0xA}
+DEFENSE_POSITION_VALUES = {0x4, 0x8, 0xC}
+
 ADD_CARD_CALL = re.compile(r"Debug\.AddCard\(([^)\n]+)\)")
 PLAYER_INFO_CALL = re.compile(
     r"Debug\.SetPlayerInfo\(\s*([01])\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)"
@@ -59,6 +72,7 @@ class PuzzleState:
     has_custom_effect: bool
     has_pre_equip: bool
     has_pre_summon: bool
+    overlay_call_count: int
     unparsed_add_card_calls: int
 
 
@@ -385,6 +399,7 @@ def parse_puzzle(path: Path, puzzle_root: Path) -> PuzzleState:
         has_custom_effect="Effect.CreateEffect" in source,
         has_pre_equip="Debug.PreEquip" in source,
         has_pre_summon="Debug.PreSummon" in source,
+        overlay_call_count=len(re.findall(r"\bDuel\.Overlay\s*\(", source)),
         unparsed_add_card_calls=unparsed,
     )
 
@@ -420,12 +435,34 @@ def select_static_puzzles(
     return selected
 
 
+def _position_value(position: str) -> int | None:
+    value = position.strip()
+    if re.fullmatch(r"[0-9]+", value):
+        return int(value, 10)
+    parts = [part.strip() for part in re.split(r"[|+]", value)]
+    if not parts or any(part not in POSITION_VALUES for part in parts):
+        return None
+    result = 0
+    for part in parts:
+        result |= POSITION_VALUES[part]
+    return result
+
+
 def _is_hidden(card: PuzzleCard) -> bool:
     if card.location == "LOCATION_HAND":
         return card.controller == 1
     if card.location in {"LOCATION_DECK", "LOCATION_EXTRA"}:
         return card.controller == 1 or card.location == "LOCATION_DECK"
-    return "FACEDOWN" in card.position
+    position = _position_value(card.position)
+    return position in FACEDOWN_POSITION_VALUES if position is not None else False
+
+
+def _is_defense(card: PuzzleCard) -> bool:
+    position = _position_value(card.position)
+    return (
+        card.location == "LOCATION_MZONE"
+        and position in DEFENSE_POSITION_VALUES
+    )
 
 
 def _zone_card(
@@ -437,18 +474,20 @@ def _zone_card(
     if card is None:
         return f'<div class="field-card field-card--empty"><span>{html.escape(label)}</span></div>'
     name = card_names.get(card.card_id, f"Card {card.card_id}")
-    ownership_class = ""
+    classes = []
     if card.location == "LOCATION_MZONE":
-        ownership_class = (
+        classes.append(
             "card-face--monster-player"
             if card.controller == 0
             else "card-face--monster-opponent"
         )
+        if _is_defense(card):
+            classes.append("card-face--defense")
     return _card_face(
         card.card_id,
         name,
         card_image_dir,
-        class_name=ownership_class,
+        class_name=" ".join(classes),
         hidden=_is_hidden(card),
     )
 
@@ -509,7 +548,13 @@ def _player_field(
             ("Extra", "LOCATION_EXTRA"),
         )
     )
-    return f'<div class="field-half"><div class="zone-grid monsters">{monsters}</div><div class="zone-grid spells">{spells}</div><aside class="piles">{piles}</aside></div>'
+    rows = (
+        f'<div class="zone-grid spells">{spells}</div><div class="zone-grid monsters">{monsters}</div>'
+        if controller == 1
+        else f'<div class="zone-grid monsters">{monsters}</div><div class="zone-grid spells">{spells}</div>'
+    )
+    side = "opponent" if controller == 1 else "player"
+    return f'<div class="field-half field-half--{side}">{rows}<aside class="piles">{piles}</aside></div>'
 
 
 def _puzzle_page(
@@ -528,25 +573,26 @@ def _puzzle_page(
         if card.location == "LOCATION_MZONE" and card.sequence in {5, 6}
     ]
     emz = "".join(
-        _zone_card(
-            next((card for card in extra_monsters if card.sequence == sequence), None),
-            card_names,
-            card_image_dir,
-            f"EMZ {sequence - 4}",
-        )
-        for sequence in (5, 6)
+        f'<div class="emz-slot emz-slot--{alignment}">'
+        f'{_zone_card(next((card for card in extra_monsters if card.sequence == sequence), None), card_names, card_image_dir, f"EMZ {sequence - 4}")}'
+        "</div>"
+        for sequence, alignment in ((5, "left"), (6, "right"))
     )
     warnings = []
     if state.has_custom_effect:
         warnings.append("含自定义 Effect")
     if state.unparsed_add_card_calls:
         warnings.append(f"{state.unparsed_add_card_calls} 个 AddCard 未解析")
+    if state.overlay_call_count:
+        warnings.append("含动态 Overlay 调用")
     warning_badges = "".join(f'<span class="badge badge--warn">{html.escape(value)}</span>' for value in warnings)
     flags = []
     if state.has_pre_equip:
         flags.append("PreEquip")
     if state.has_pre_summon:
         flags.append("PreSummon")
+    if state.overlay_call_count:
+        flags.append(f"Overlay×{state.overlay_call_count}（素材关系未静态解析）")
     flag_text = "、".join(flags) if flags else "无额外预处理标记"
     missing_images = sorted(
         {card.card_id for card in cards if not _card_image(card.card_id, card_image_dir)}
@@ -556,24 +602,26 @@ def _puzzle_page(
 <title>{html.escape(state.title)}</title><style>{_base_css(PUZZLE_HEIGHT)}
 .objective {{ margin-top: 17px; padding: 16px 21px; display: flex; align-items: center; gap: 18px; border-left: 7px solid #c23d33; }}
 .objective strong {{ flex: 0 0 auto; font-size: 14px; text-transform: uppercase; }} .objective span {{ font-size: 21px; font-weight: 700; }}
-.duel {{ position: relative; margin-top: 16px; height: 1160px; overflow: hidden; color: #edf4ef; background: #193d35; border: 8px solid #26342f; box-shadow: inset 0 0 0 2px #6f8178; }}
+.duel {{ position: relative; margin-top: 16px; height: 1220px; overflow: hidden; color: #edf4ef; background: #193d35; border: 8px solid #26342f; box-shadow: inset 0 0 0 2px #6f8178; --card-w: 92px; --card-h: 134.17px; --zone-track: 134.17px; --zone-gap: 12px; }}
 .duel::before {{ content: ""; position: absolute; inset: 0; background-image: linear-gradient(#ffffff0b 1px, transparent 1px), linear-gradient(90deg, #ffffff0b 1px, transparent 1px); background-size: 46px 46px; }}
 .lp-row {{ position: absolute; z-index: 3; left: 28px; right: 28px; display: flex; justify-content: space-between; align-items: center; height: 54px; padding: 0 18px; background: #102923dd; border: 1px solid #6a8177; }}
 .lp-row--opponent {{ top: 18px; }} .lp-row--player {{ bottom: 18px; }} .lp-row strong {{ color: #f0ce76; font-size: 27px; }}
 .hand-wrap {{ position: absolute; z-index: 4; left: 250px; width: 1000px; height: 145px; display: flex; align-items: center; justify-content: center; }}
 .hand-wrap--opponent {{ top: 80px; }} .hand-wrap--player {{ bottom: 80px; }}
-.hand {{ position: relative; display: flex; justify-content: center; height: 132px; }} .hand .card-face {{ width: 90px; height: 131px; margin-left: calc((90px - var(--advance)) * -1); }} .hand .card-face:first-child {{ margin-left: 0; }}
+.hand {{ position: relative; display: flex; justify-content: center; height: var(--card-h); }} .hand .card-face {{ width: var(--card-w); height: var(--card-h); margin-left: calc((var(--card-w) - var(--advance)) * -1); }} .hand .card-face:first-child {{ margin-left: 0; }}
 .omitted {{ align-self: center; margin-left: 9px; padding: 8px; background: #102923; font-weight: 700; }}
-.board-core {{ position: absolute; z-index: 2; left: 50%; top: 230px; width: 1180px; height: 700px; transform: translateX(-50%); }}
-.field-half {{ position: absolute; left: 160px; width: 700px; height: 285px; }} .field-half:nth-of-type(1) {{ top: 0; }} .field-half:nth-of-type(3) {{ bottom: 0; }}
-.zone-grid {{ position: absolute; left: 0; display: grid; grid-template-columns: repeat(5, 92px); gap: 16px; }} .monsters {{ top: 0; }} .spells {{ top: 150px; }}
-.field-card, .field-half .card-face, .emz .card-face {{ width: 92px; height: 134px; }}
+.board-core {{ position: absolute; z-index: 2; left: 50%; top: 230px; width: 1180px; height: 718px; transform: translateX(-50%); }}
+.field-half {{ position: absolute; left: 64px; width: 1060px; height: 280px; }} .field-half--opponent {{ top: 0; }} .field-half--player {{ bottom: 0; }}
+.zone-grid {{ position: absolute; left: 0; display: grid; grid-template-columns: repeat(5, var(--zone-track)); grid-auto-rows: var(--card-h); gap: var(--zone-gap); place-items: center; }} .field-half .zone-grid:first-child {{ top: 0; }} .field-half .zone-grid:nth-child(2) {{ top: 146px; }}
+.field-card, .field-half .card-face, .emz .card-face {{ width: var(--card-w); height: var(--card-h); aspect-ratio: 59 / 86; }}
 .card-face--monster-player {{ border: 4px solid #2e8dd2; }} .card-face--monster-opponent {{ border: 4px solid #d64a43; }}
+.card-face--defense {{ transform: rotate(90deg); }}
 .field-card--empty {{ display: grid; place-items: center; color: #9bb3a9; border: 2px solid #87a09677; font-size: 12px; font-weight: 700; }}
-.piles {{ position: absolute; left: 570px; top: 0; display: grid; grid-template-columns: repeat(2, 92px); gap: 16px 18px; }}
-.pile {{ position: relative; width: 92px; height: 134px; }} .pile .card-face, .pile .field-card {{ width: 92px; height: 134px; }} .pile-label {{ position: absolute; z-index: 5; left: 3px; top: 3px; padding: 3px 5px; color: #fff; background: #102923dd; font-size: 10px; }}
+.piles {{ position: absolute; left: 790px; top: 0; display: grid; grid-template-columns: repeat(2, var(--card-w)); gap: 12px 18px; }}
+.pile {{ position: relative; width: var(--card-w); height: var(--card-h); }} .pile .card-face, .pile .field-card {{ width: var(--card-w); height: var(--card-h); }} .pile-label {{ position: absolute; z-index: 5; left: 3px; top: 3px; padding: 3px 5px; color: #fff; background: #102923dd; font-size: 10px; }}
 .pile > strong {{ position: absolute; z-index: 5; right: 4px; bottom: 4px; min-width: 25px; padding: 3px; color: #102923; background: #f0ce76; text-align: center; font-size: 13px; }}
-.emz {{ position: absolute; z-index: 4; left: 321px; top: 282px; display: grid; grid-template-columns: repeat(2, 92px); gap: 32px; }}
+.emz {{ position: absolute; z-index: 4; left: 64px; top: 292px; display: grid; grid-template-columns: repeat(5, var(--zone-track)); gap: var(--zone-gap); }}
+.emz-slot {{ width: var(--zone-track); height: var(--card-h); display: grid; place-items: center; }} .emz-slot--left {{ grid-column: 2; }} .emz-slot--right {{ grid-column: 4; }}
 .audit-note {{ margin-top: 14px; padding: 13px 17px; color: #4d615b; font-size: 13px; line-height: 1.45; }}
 </style></head><body><main class="page">
 <header class="topline"><div><p class="eyebrow">YGO-Bench · Project Ignis Puzzle · 初始局面审阅</p><h1>{index:02d} / {total:02d} · {html.escape(state.title)}</h1></div>
@@ -680,6 +728,7 @@ def render_pilot_review_bundle(
     }
     manifest = {
         "renderer": "ygo_bench.visualization.pilot_review",
+        "dataset_version": "pilot-review-v0.2",
         "inputs": {
             "understanding": str(understanding_path.resolve()),
             "understanding_sha256": _sha256(understanding_path),
@@ -702,6 +751,9 @@ def render_pilot_review_bundle(
             "states_with_custom_effects": sum(state.has_custom_effect for state in puzzle_states),
             "states_with_unparsed_add_card_calls": sum(
                 bool(state.unparsed_add_card_calls) for state in puzzle_states
+            ),
+            "states_with_overlay_calls": sum(
+                bool(state.overlay_call_count) for state in puzzle_states
             ),
         },
         "puzzle_states": [asdict(state) for state in puzzle_states],

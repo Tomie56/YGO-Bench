@@ -67,6 +67,18 @@ VISIBILITY_NAMES = {
     6: "opponent_facedown",
 }
 HIDDEN_VISIBILITY_CODES = {1, 6}
+POSITION_NAMES = {
+    0: "none",
+    1: "face-up attack",
+    2: "face-down attack",
+    3: "attack",
+    4: "face-up defense",
+    5: "face-up",
+    6: "face-down defense",
+    7: "face-down",
+    8: "defense",
+}
+DEFENSE_POSITION_IDS = {4, 6, 8}
 
 # A physical Yu-Gi-Oh! card is 59 x 86 mm. CSS enforces this ratio for every
 # displayed card, pile, and Extra Monster Zone.
@@ -242,14 +254,30 @@ def _decode_cards(
             )
         card_code = code_list[card_id - 1] if card_id else None
         name = card_names.get(card_code, f"Card {card_code}") if card_code else None
+        encoded_sequence = int(row[3])
+        location = LOCATION_NAMES.get(location_id, f"Location {location_id}")
+        sequence = (
+            encoded_sequence - 1
+            if location in {"Monster Zone", "Spell & Trap Zone"}
+            and encoded_sequence > 0
+            else encoded_sequence
+        )
+        position_id = int(row[5])
+        if position_id not in POSITION_NAMES:
+            raise ValueError(f"Unknown observation position ID: {position_id}")
         decoded.append(
             {
                 "row_index": row_index,
                 "side": side,
                 "location_id": location_id,
-                "location": LOCATION_NAMES.get(location_id, f"Location {location_id}"),
-                "sequence": int(row[3]),
-                "position_id": int(row[5]),
+                "location": location,
+                "sequence": sequence,
+                "observation_sequence": encoded_sequence,
+                "position_id": position_id,
+                "position": POSITION_NAMES[position_id],
+                "is_defense": position_id in DEFENSE_POSITION_IDS,
+                "is_overlay": bool(row[6]),
+                "overlay_materials": [],
                 "controller_is_opponent": bool(row[4]),
                 "visibility_code": visibility_code,
                 "visibility": VISIBILITY_NAMES[visibility_code],
@@ -259,24 +287,57 @@ def _decode_cards(
                 "name": name,
             }
         )
+    hosts = {
+        (card["side"], card["sequence"]): card
+        for card in decoded
+        if card["location"] == "Monster Zone" and not card["is_overlay"]
+    }
+    for material in (card for card in decoded if card["is_overlay"]):
+        host = hosts.get((material["side"], material["sequence"]))
+        if host is None:
+            raise ValueError(
+                "Overlay material has no visible host at "
+                f"{material['side']} Monster Zone {material['sequence'] + 1}"
+            )
+        host["overlay_materials"].append(
+            {
+                "row_index": material["row_index"],
+                "card_code": material["card_code"],
+                "name": material["name"],
+            }
+        )
     return decoded
 
 
 def _zone_counts(cards: list[dict[str, Any]], side: str) -> Counter[str]:
-    return Counter(card["location"] for card in cards if card["side"] == side)
+    return Counter(
+        card["location"]
+        for card in cards
+        if card["side"] == side and not card["is_overlay"]
+    )
 
 
 def _field_cards(cards: list[dict[str, Any]], side: str, location: str) -> dict[int, dict[str, Any]]:
     result: dict[int, dict[str, Any]] = {}
     for card in cards:
-        if card["side"] == side and card["location"] == location:
+        if (
+            card["side"] == side
+            and card["location"] == location
+            and not card["is_overlay"]
+        ):
             result[card["sequence"]] = card
     return result
 
 
 def _zone_cards(cards: list[dict[str, Any]], side: str, location: str) -> list[dict[str, Any]]:
     return sorted(
-        (card for card in cards if card["side"] == side and card["location"] == location),
+        (
+            card
+            for card in cards
+            if card["side"] == side
+            and card["location"] == location
+            and not card["is_overlay"]
+        ),
         key=lambda card: card["sequence"],
     )
 
@@ -314,28 +375,38 @@ def _card_markup(
 ) -> str:
     if card is None:
         return f'<div class="card card--empty"><span>{html.escape(empty_label)}</span></div>'
-    ownership_class = ""
+    classes = ["card"]
     if monster:
-        ownership_class = (
-            " card--monster-opponent"
+        classes.append(
+            "card--monster-opponent"
             if card["side"] == "opponent"
-            else " card--monster-current"
+            else "card--monster-current"
         )
-    if card["hidden"]:
-        return (
-            f'<div class="card card--back{ownership_class}" '
-            'aria-label="Hidden card"><span>HIDDEN</span></div>'
-        )
-    image_uri = _card_image_uri(card, card_image_dir)
-    label = html.escape(_card_label(card))
-    if image_uri:
-        return (
-            f'<div class="card{ownership_class}">'
-            f'<img src="{html.escape(image_uri)}" alt="{label}" /></div>'
-        )
-    return (
-        f'<div class="card card--unavailable{ownership_class}"><span>{label}</span></div>'
+        if card["is_defense"]:
+            classes.append("card--defense")
+    materials = card.get("overlay_materials", [])
+    if materials:
+        classes.append("card--with-materials")
+    material_badge = (
+        f'<span class="material-count">{len(materials)} MAT</span>'
+        if materials
+        else ""
     )
+    position = html.escape(card.get("position", "unknown"))
+    if card["hidden"]:
+        classes.append("card--back")
+        content = "<span>HIDDEN</span>"
+        attributes = f'aria-label="Hidden card" data-position="{position}"'
+    else:
+        image_uri = _card_image_uri(card, card_image_dir)
+        label = html.escape(_card_label(card))
+        attributes = f'title="{label} · {position}"'
+        if image_uri:
+            content = f'<img src="{html.escape(image_uri)}" alt="{label}" />'
+        else:
+            classes.append("card--unavailable")
+            content = f"<span>{label}</span>"
+    return f'<div class="{" ".join(classes)}" {attributes}>{content}{material_badge}</div>'
 
 
 def _field_row_markup(
@@ -534,7 +605,7 @@ def _page_markup(
 @page {{ margin: 0; size: 1800px 1920px; }}
 * {{ box-sizing: border-box; }}
 body {{ margin: 0; width: 1800px; min-height: 1920px; color: #eaf2ef; background: #0b1617; font-family: Arial, Helvetica, sans-serif; letter-spacing: 0; }}
-.audit {{ width: 1704px; margin: 0 auto; padding: 34px 0 48px; }}
+.audit {{ width: 1704px; margin: 0 auto; padding: 34px 0 48px; --card-w: 100px; --card-h: 145.76px; --zone-track: 146px; --zone-gap: 12px; --field-offset: 492px; }}
 .topbar {{ display: flex; justify-content: space-between; align-items: end; border-bottom: 2px solid #49645a; padding: 0 10px 24px; }}
 .eyebrow, h3, .resource p, .hand h3 {{ margin: 0; color: #9fb9ac; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0; }}
 h1 {{ margin: 8px 0 0; font-size: 31px; line-height: 1.15; }}
@@ -546,28 +617,31 @@ h1 {{ margin: 8px 0 0; font-size: 31px; line-height: 1.15; }}
 .player-half {{ padding: 18px 0 24px; }}
 .player-half h2, .emz h2 {{ margin: 0 0 16px; font-size: 21px; letter-spacing: 0; }}
 .player-half--opponent h2 {{ color: #f1c0bc; }} .player-half--current_player h2 {{ color: #b9ead0; }}
-.player-layout {{ display: grid; grid-template-columns: 456px 1fr; gap: 56px; align-items: end; }}
+.player-layout {{ display: grid; grid-template-columns: 456px minmax(0, 1fr); gap: 36px; align-items: end; }}
 .resources {{ display: grid; grid-template-columns: repeat(4, 100px); gap: 18px; align-items: end; }}
 .resource {{ min-width: 0; }} .resource h3 {{ color: #d4e2da; height: 33px; line-height: 1.15; }}
 .resource p {{ margin-top: 9px; font-size: 12px; text-transform: none; color: #b7c7be; }}
 .pile {{ position: relative; width: 100px; }} .pile::before {{ content: \"\"; position: absolute; inset: -6px 6px 6px -6px; background: #10251f; border: 1px solid #638073; z-index: 0; }}
-.card {{ position: relative; z-index: 1; width: 100px; aspect-ratio: 59 / 86; overflow: hidden; background: #273d36; border: 1px solid #819387; box-shadow: 0 2px 5px #0008; }}
+.card {{ position: relative; z-index: 1; width: var(--card-w); height: var(--card-h); aspect-ratio: 59 / 86; overflow: hidden; background: #273d36; border: 1px solid #819387; box-shadow: 0 2px 5px #0008; }}
 .card img {{ display: block; width: 100%; height: 100%; object-fit: cover; }}
 .card--empty {{ display: grid; place-items: center; color: #6f8980; background: #1b302b; border-style: dashed; box-shadow: none; font-size: 11px; }}
 .card--back {{ display: grid; place-items: end center; padding-bottom: 9px; color: #ead9b8; background: radial-gradient(ellipse at center, #130b07 0 13%, #713816 14% 18%, #1d0d08 19% 28%, #a65824 29% 33%, #1a0b07 34% 44%, #733717 45% 50%, #0c0807 51% 100%); border: 4px solid #171310; box-shadow: inset 0 0 0 2px #9c6a3d, 0 2px 5px #0008; font-size: 10px; font-weight: 700; }}
 .card--back span {{ padding: 3px 6px; background: #0c0908d9; }}
 .card--monster-opponent {{ border: 4px solid #e45d5d; box-shadow: 0 0 0 2px #5c1717, 0 3px 8px #000a; }}
 .card--monster-current {{ border: 4px solid #4d9fff; box-shadow: 0 0 0 2px #164a80, 0 3px 8px #000a; }}
+.card--defense {{ transform: rotate(90deg); }}
+.card--with-materials {{ box-shadow: -7px 7px 0 #8b8171, -12px 12px 0 #403b34, 0 3px 8px #000a; }}
+.material-count {{ position: absolute; z-index: 4; right: 3px; bottom: 3px; padding: 3px 5px; color: #fff; background: #111d; border: 1px solid #d7c287; font-size: 10px; font-weight: 700; }}
 .card--unavailable {{ display: grid; place-items: center; padding: 8px; color: #e9eee9; background: #405a51; text-align: center; font-size: 11px; font-weight: 700; }}
 .field {{ min-width: 0; }} .zone-row + .zone-row {{ margin-top: 24px; }}
-.zone-row h3 {{ margin-bottom: 9px; color: #cce3d5; }} .zone-slots {{ display: grid; grid-template-columns: repeat(5, 100px); gap: 16px; }}
+.zone-row h3 {{ margin-bottom: 9px; color: #cce3d5; }} .zone-slots {{ display: grid; grid-template-columns: repeat(5, var(--zone-track)); grid-auto-rows: var(--card-h); gap: var(--zone-gap); place-items: center; }}
 .hand {{ margin: 25px 0 0 512px; }} .player-half--opponent .hand {{ margin-top: 0; margin-bottom: 25px; }} .hand h3 {{ display: flex; gap: 8px; align-items: center; margin-bottom: 10px; color: #d8e7df; }} .hand h3 span {{ color: #f4d68b; font-size: 18px; }}
 .hand-slots {{ display: grid; grid-template-columns: repeat(10, 72px); grid-auto-rows: 146px; align-items: start; width: 748px; }}
 .hand-slots .card {{ width: 100px; }} .hand-overflow {{ align-self: center; color: #f4d68b; font-size: 19px; font-weight: 700; }}
 .emz {{ padding: 20px 0; border-top: 2px solid #bf9e48; border-bottom: 2px solid #bf9e48; }}
-.emz h2 {{ margin-left: 512px; color: #f4d68b; font-size: 16px; text-transform: uppercase; }}
-.emz-grid {{ display: grid; grid-template-columns: repeat(5, 100px); gap: 16px; margin-left: 512px; }}
-.emz-slot {{ position: relative; }} .emz-slot--left {{ grid-column: 2; }} .emz-slot--right {{ grid-column: 4; }}
+.emz h2 {{ margin-left: var(--field-offset); color: #f4d68b; font-size: 16px; text-transform: uppercase; }}
+.emz-grid {{ display: grid; grid-template-columns: repeat(5, var(--zone-track)); gap: var(--zone-gap); margin-left: var(--field-offset); }}
+.emz-slot {{ position: relative; width: var(--zone-track); height: var(--card-h); display: grid; place-items: center; }} .emz-slot--left {{ grid-column: 2; }} .emz-slot--right {{ grid-column: 4; }}
 .history {{ min-width: 0; height: 100%; max-height: 1510px; overflow: hidden; background: #111f20; border: 2px solid #3a5550; padding: 20px 17px; }}
 .history h2 {{ margin: 0 0 14px; padding-bottom: 12px; border-bottom: 1px solid #48605b; font-size: 19px; }}
 .history-list {{ display: flex; flex-direction: column; gap: 10px; overflow: hidden; }}

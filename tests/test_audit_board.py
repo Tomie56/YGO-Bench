@@ -186,6 +186,36 @@ class AuditBoardTest(unittest.TestCase):
         self.assertIn('card--monster-opponent', rendered_html)
         self.assertIn('card--monster-current', rendered_html)
 
+    def test_render_decodes_defense_positions_and_xyz_materials(self) -> None:
+        observation, infos = self._state()
+        observation["cards_"][0, 1, 5] = 4
+        observation["cards_"][0, 2, :7] = (0, 1, 3, 1, 0, 5, 1)
+        infos["card_visibility_"][0, 2] = 3
+        observation["cards_"][0, 7, :7] = (0, 0, 3, 4, 1, 6, 0)
+        infos["card_visibility_"][0, 7] = 6
+        output = self.root / "positions-and-materials.html"
+
+        outputs = render_audit_board(
+            observation,
+            infos,
+            self.code_list,
+            self.cdb,
+            output,
+        )
+
+        rendered_html = output.read_text(encoding="utf-8")
+        manifest = json.loads(outputs["manifest"].read_text(encoding="utf-8"))
+        host = next(card for card in manifest["cards"] if card["row_index"] == 1)
+        material = next(card for card in manifest["cards"] if card["row_index"] == 2)
+        self.assertEqual((host["observation_sequence"], host["sequence"]), (1, 0))
+        self.assertEqual(host["position"], "face-up defense")
+        self.assertEqual(len(host["overlay_materials"]), 1)
+        self.assertTrue(material["is_overlay"])
+        self.assertEqual(manifest["zone_counts"]["current_player"]["Monster Zone"], 1)
+        self.assertIn("card--defense", rendered_html)
+        self.assertIn("card--with-materials", rendered_html)
+        self.assertIn("1 MAT", rendered_html)
+
     def test_render_history_limits_entries_and_rejects_hidden_identity(self) -> None:
         observation, infos = self._state()
         events = [

@@ -14,7 +14,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--manifest",
         type=Path,
-        default=ROOT / "tmp" / "pilot-review-v0.1" / "manifest.json",
+        default=ROOT / "tmp" / "pilot-review-v0.2" / "manifest.json",
     )
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8765)

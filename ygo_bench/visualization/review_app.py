@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import re
+import sqlite3
 import threading
 from datetime import datetime, timezone
 from http import HTTPStatus
@@ -14,6 +16,37 @@ from PIL import Image
 
 ASSET_DIR = Path(__file__).with_name("reviewer_assets")
 DECISIONS = {"pass", "revise", "reject"}
+POSITION_VALUES = {
+    "POS_FACEUP_ATTACK": 0x1,
+    "POS_FACEDOWN_ATTACK": 0x2,
+    "POS_ATTACK": 0x3,
+    "POS_FACEUP_DEFENSE": 0x4,
+    "POS_FACEUP": 0x5,
+    "POS_FACEDOWN_DEFENSE": 0x8,
+    "POS_FACEDOWN": 0xA,
+    "POS_DEFENSE": 0xC,
+}
+POSITION_LABELS = {
+    0x1: "表侧攻击",
+    0x2: "里侧攻击",
+    0x3: "攻击表示",
+    0x4: "表侧守备",
+    0x5: "表侧",
+    0x8: "里侧守备",
+    0xA: "里侧",
+    0xC: "守备表示",
+}
+FACEDOWN_POSITIONS = {0x2, 0x8, 0xA}
+DEFENSE_POSITIONS = {0x4, 0x8, 0xC}
+LOCATION_LABELS = {
+    "LOCATION_DECK": "主卡组",
+    "LOCATION_HAND": "手牌",
+    "LOCATION_MZONE": "怪兽区",
+    "LOCATION_SZONE": "魔法陷阱区",
+    "LOCATION_GRAVE": "墓地",
+    "LOCATION_REMOVED": "除外区",
+    "LOCATION_EXTRA": "额外卡组",
+}
 
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -38,6 +71,97 @@ def _thumbnail_url(category: str, output: dict[str, str]) -> str:
     return f"/thumbnails/{category}/{filename}"
 
 
+def _position_value(value: object) -> int | None:
+    position = str(value).strip()
+    if re.fullmatch(r"[0-9]+", position):
+        return int(position, 10)
+    parts = [part.strip() for part in re.split(r"[|+]", position)]
+    if not parts or any(part not in POSITION_VALUES for part in parts):
+        return None
+    result = 0
+    for part in parts:
+        result |= POSITION_VALUES[part]
+    return result
+
+
+def _interactive_puzzle_state(state: dict[str, Any]) -> dict[str, Any]:
+    cards = []
+    for index, raw_card in enumerate(state["cards"]):
+        controller = int(raw_card["controller"])
+        location = str(raw_card["location"])
+        position_value = _position_value(raw_card["position"])
+        face_down = position_value in FACEDOWN_POSITIONS
+        identity_visible = not (
+            location == "LOCATION_DECK"
+            or (controller == 1 and location in {"LOCATION_HAND", "LOCATION_EXTRA"})
+            or (controller == 1 and face_down)
+        )
+        cards.append(
+            {
+                "uid": f"card-{index}",
+                "card_id": int(raw_card["card_id"]) if identity_visible else None,
+                "owner": int(raw_card["owner"]),
+                "controller": controller,
+                "location": location,
+                "location_label": LOCATION_LABELS.get(location, location),
+                "sequence": int(raw_card["sequence"]),
+                "position": POSITION_LABELS.get(
+                    position_value, str(raw_card["position"])
+                ),
+                "face_down": face_down,
+                "defense": position_value in DEFENSE_POSITIONS,
+                "identity_visible": identity_visible,
+            }
+        )
+    return {
+        "objective": str(state["objective"]),
+        "ai_name": state.get("ai_name"),
+        "life_points": {
+            "player": int(state["player_lp"]),
+            "opponent": int(state["opponent_lp"]),
+        },
+        "cards": cards,
+        "overlay": {
+            "materials": [],
+            "unresolved_calls": int(state.get("overlay_call_count", 0)),
+        },
+    }
+
+
+def _load_card_details(
+    cdb_paths: list[Path], card_ids: set[int]
+) -> dict[str, dict[str, Any]]:
+    details: dict[str, dict[str, Any]] = {}
+    if not card_ids:
+        return details
+    placeholders = ",".join("?" for _ in card_ids)
+    query = f"""
+        SELECT d.id, t.name, t.desc, d.type, d.atk, d.def,
+               d.level, d.race, d.attribute
+        FROM datas AS d JOIN texts AS t ON t.id = d.id
+        WHERE d.id IN ({placeholders})
+    """
+    parameters = sorted(card_ids)
+    for path in cdb_paths:
+        if not path.is_file():
+            raise FileNotFoundError(f"Card database not found: {path}")
+        with sqlite3.connect(f"file:{path.resolve()}?mode=ro", uri=True) as connection:
+            for row in connection.execute(query, parameters):
+                card_id, name, description, type_value, attack, defense, level, race, attribute = row
+                details[str(card_id)] = {
+                    "card_id": int(card_id),
+                    "name": str(name),
+                    "description": str(description),
+                    "type": int(type_value),
+                    "attack": int(attack),
+                    "defense": int(defense),
+                    "level": int(level) & 0xFF,
+                    "race": int(race),
+                    "attribute": int(attribute),
+                }
+    return details
+
+
 def build_review_catalog(manifest_path: Path) -> dict[str, Any]:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     output_dir = manifest_path.parent
@@ -46,6 +170,7 @@ def build_review_catalog(manifest_path: Path) -> dict[str, Any]:
     construction = _read_jsonl(Path(manifest["inputs"]["construction"]))
     outputs = manifest["outputs"]
     items: list[dict[str, Any]] = []
+    visible_puzzle_card_ids: set[int] = set()
 
     if len(understanding) != len(outputs["understanding"]):
         raise ValueError("Understanding records and rendered outputs are misaligned")
@@ -147,6 +272,12 @@ def build_review_catalog(manifest_path: Path) -> dict[str, Any]:
                 f"dynamic Overlay calls not statically resolved: {state['overlay_call_count']}"
             )
         relative_path = str(state["relative_path"])
+        interactive_state = _interactive_puzzle_state(state)
+        visible_puzzle_card_ids.update(
+            card["card_id"]
+            for card in interactive_state["cards"]
+            if card["card_id"] is not None
+        )
         items.append(
             {
                 "id": f"puzzle:{relative_path}",
@@ -162,8 +293,16 @@ def build_review_catalog(manifest_path: Path) -> dict[str, Any]:
                 "thumbnail_url": _thumbnail_url("puzzles", output),
                 "asset_issues": issues,
                 "core_status": "static_only",
+                "interactive_state": interactive_state,
             }
         )
+
+    raw_cdb_paths = manifest["inputs"].get("cdb_paths")
+    if not isinstance(raw_cdb_paths, list) or not raw_cdb_paths:
+        raise ValueError("Review manifest is missing inputs.cdb_paths")
+    card_details = _load_card_details(
+        [Path(value) for value in raw_cdb_paths], visible_puzzle_card_ids
+    )
 
     metadata_path = card_image_dir.parent / "metadata.json"
     summary_path = card_image_dir.parent / "summary.json"
@@ -173,6 +312,7 @@ def build_review_catalog(manifest_path: Path) -> dict[str, Any]:
         "dataset_version": str(manifest.get("dataset_version", "pilot-review-v0.2")),
         "items": items,
         "counts": manifest["counts"],
+        "card_catalog": card_details,
         "asset_snapshot": {
             "name": card_image_dir.parent.name,
             "passcode_count": metadata["passcode_count"],
@@ -180,7 +320,9 @@ def build_review_catalog(manifest_path: Path) -> dict[str, Any]:
             "failed": summary["failed"],
             "started_at_unix": metadata["started_at_unix"],
             "sources": [source["name"] for source in metadata["sources"]],
+            "card_image_base_url": "card-images",
         },
+        "card_image_source_dir": str(card_image_dir),
         "output_dir": str(output_dir.resolve()),
     }
 
@@ -199,6 +341,27 @@ def build_thumbnails(catalog: dict[str, Any], output_dir: Path) -> None:
             position = ((360 - image.width) // 2, (240 - image.height) // 2)
             canvas.paste(image, position)
             canvas.save(target, "JPEG", quality=84, optimize=True)
+
+
+def build_interactive_card_images(
+    catalog: dict[str, Any], source_dir: Path, output_dir: Path
+) -> dict[str, int]:
+    target_dir = output_dir / "card-images"
+    target_dir.mkdir(parents=True, exist_ok=True)
+    written = 0
+    missing = 0
+    for card_id in sorted(catalog["card_catalog"], key=int):
+        source = source_dir / f"{card_id}.jpg"
+        if not source.is_file():
+            missing += 1
+            continue
+        target = target_dir / source.name
+        with Image.open(source) as image:
+            image = image.convert("RGB")
+            image.thumbnail((180, 263), Image.Resampling.LANCZOS)
+            image.save(target, "JPEG", quality=82, optimize=True)
+        written += 1
+    return {"written": written, "missing": missing}
 
 
 class ReviewStore:
@@ -333,6 +496,9 @@ def serve_review_app(
     output_dir = manifest_path.parent
     catalog = build_review_catalog(manifest_path)
     build_thumbnails(catalog, output_dir)
+    build_interactive_card_images(
+        catalog, Path(catalog["card_image_source_dir"]), output_dir
+    )
     store = ReviewStore(
         output_dir / "reviews.jsonl",
         {str(item["id"]) for item in catalog["items"]},

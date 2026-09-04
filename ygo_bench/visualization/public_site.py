@@ -31,6 +31,7 @@ def _sha256(path: Path) -> str:
 def make_static_catalog(catalog: dict[str, Any]) -> dict[str, Any]:
     result = copy.deepcopy(catalog)
     result.pop("output_dir", None)
+    result.pop("card_image_source_dir", None)
     result["reviews"] = {}
     for item in result["items"]:
         item["image_url"] = item["image_url"].lstrip("/")
@@ -65,7 +66,11 @@ def _copy_review_assets(
 
 
 def build_public_site(manifest_path: Path, output_dir: Path) -> Path:
-    from .review_app import build_review_catalog, build_thumbnails
+    from .review_app import (
+        build_interactive_card_images,
+        build_review_catalog,
+        build_thumbnails,
+    )
 
     manifest_path = manifest_path.resolve()
     output_dir = output_dir.resolve()
@@ -76,6 +81,7 @@ def build_public_site(manifest_path: Path, output_dir: Path) -> Path:
 
     catalog = build_review_catalog(manifest_path)
     build_thumbnails(catalog, manifest_path.parent)
+    card_image_source_dir = Path(catalog["card_image_source_dir"])
     static_catalog = make_static_catalog(catalog)
 
     output_dir.mkdir(parents=True)
@@ -88,6 +94,9 @@ def build_public_site(manifest_path: Path, output_dir: Path) -> Path:
     review_dir = output_dir / "review"
     review_dir.mkdir()
     _copy_review_assets(static_catalog, manifest_path.parent, review_dir)
+    build_interactive_card_images(
+        static_catalog, card_image_source_dir, review_dir
+    )
     (review_dir / "config.json").write_text(
         json.dumps(
             {

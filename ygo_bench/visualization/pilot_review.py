@@ -670,6 +670,7 @@ def render_pilot_review_bundle(
 ) -> Path:
     """Render current static pilots and statically eligible puzzles for human review."""
     card_image_dir = card_image_dir.resolve()
+    cdb_paths = tuple(Path(path).resolve() for path in cdb_paths)
     if not card_image_dir.is_dir():
         raise FileNotFoundError(f"Card image directory not found: {card_image_dir}")
     if not puzzle_root.is_dir():
@@ -736,6 +737,7 @@ def render_pilot_review_bundle(
             "construction_sha256": _sha256(construction_path),
             "puzzle_root": str(puzzle_root.resolve()),
             "card_image_dir": str(card_image_dir),
+            "cdb_paths": [str(path) for path in cdb_paths],
         },
         "counts": {
             "understanding_questions": len(understanding),

@@ -2,12 +2,14 @@
 
 const state = {
   config: null,
+  catalog: null,
   items: [],
   filtered: [],
   reviews: {},
   index: 0,
   decision: null,
   zoom: 1,
+  selectedCard: null,
 };
 
 const elements = Object.fromEntries([
@@ -16,7 +18,10 @@ const elements = Object.fromEntries([
   "zoomInButton", "itemTitle", "itemCounter", "reviewImage", "itemCategory",
   "itemSubtitle", "itemEnvironment", "itemSource", "itemCore", "itemIssues",
   "reviewNote", "saveReviewButton", "saveStatus", "progressText", "progressBar",
-  "storageNotice", "importButton", "exportButton", "importInput",
+  "storageNotice", "importButton", "exportButton", "importInput", "zoneBrowser",
+  "zoneGroups", "interactiveStage", "duelBoard", "cardDetail", "cardDetailArt",
+  "cardDetailName", "cardDetailPasscode", "cardDetailStats",
+  "cardDetailDescription", "cardDetailContext",
 ].map((id) => [id, document.getElementById(id)]));
 
 const labels = {
@@ -31,6 +36,278 @@ const labels = {
   static_only: "仅静态初始局面，尚未 core 验证",
   not_applicable: "不适用",
 };
+
+const attributes = {
+  1: "地", 2: "水", 4: "炎", 8: "风", 16: "光", 32: "暗", 64: "神",
+};
+
+const races = {
+  1: "战士族", 2: "魔法师族", 4: "天使族", 8: "恶魔族", 16: "不死族",
+  32: "机械族", 64: "水族", 128: "炎族", 256: "岩石族", 512: "鸟兽族",
+  1024: "植物族", 2048: "昆虫族", 4096: "雷族", 8192: "龙族",
+  16384: "兽族", 32768: "兽战士族", 65536: "恐龙族", 131072: "鱼族",
+  262144: "海龙族", 524288: "爬虫类族", 1048576: "念动力族",
+  2097152: "幻神兽族", 4194304: "创造神族", 8388608: "幻龙族",
+  16777216: "电子界族", 33554432: "幻想魔族",
+};
+
+const typeFlags = [
+  [0x1, "怪兽"], [0x2, "魔法"], [0x4, "陷阱"], [0x10, "通常"],
+  [0x20, "效果"], [0x40, "融合"], [0x80, "仪式"], [0x200, "灵魂"],
+  [0x400, "同盟"], [0x800, "二重"], [0x1000, "调整"], [0x2000, "同调"],
+  [0x10000, "速攻"], [0x20000, "永续"], [0x40000, "装备"],
+  [0x80000, "场地"], [0x100000, "反击"], [0x200000, "反转"],
+  [0x400000, "卡通"], [0x800000, "超量"], [0x1000000, "灵摆"],
+  [0x4000000, "连接"],
+];
+
+function makeElement(tag, className = "", text = "") {
+  const element = document.createElement(tag);
+  if (className) element.className = className;
+  if (text) element.textContent = text;
+  return element;
+}
+
+function cardDetails(card) {
+  return card?.card_id == null ? null : state.catalog.card_catalog[String(card.card_id)] || null;
+}
+
+function cardImageUrl(cardId) {
+  return `${state.catalog.asset_snapshot.card_image_base_url}/${cardId}.jpg`;
+}
+
+function attachCardImage(container, cardId, alt) {
+  const image = document.createElement("img");
+  image.src = cardImageUrl(cardId);
+  image.alt = alt;
+  image.loading = "lazy";
+  image.addEventListener("error", () => {
+    image.remove();
+    container.classList.add("is-missing");
+    container.append(makeElement("span", "missing-card-text", `NO IMAGE\n${cardId}`));
+  }, {once: true});
+  container.append(image);
+}
+
+function formatType(typeValue) {
+  const values = typeFlags.filter(([flag]) => (typeValue & flag) !== 0).map(([, label]) => label);
+  return values.join(" / ") || "未知类型";
+}
+
+function formatStat(value) {
+  return value < 0 ? "?" : String(value);
+}
+
+function sideLabel(controller) {
+  return controller === 0 ? "我方" : "对手";
+}
+
+function renderCardDetail(card, context = "") {
+  state.selectedCard = card;
+  elements.cardDetail.hidden = false;
+  elements.cardDetailArt.replaceChildren();
+  elements.cardDetailContext.textContent = context || `${sideLabel(card.controller)} · ${card.location_label}`;
+  const details = cardDetails(card);
+  if (!details) {
+    elements.cardDetailArt.className = "card-detail__art card-back";
+    elements.cardDetailName.textContent = "隐藏卡牌";
+    elements.cardDetailPasscode.textContent = "身份未向当前观察者公开";
+    elements.cardDetailStats.textContent = `${sideLabel(card.controller)} · ${card.location_label} · ${card.position}`;
+    elements.cardDetailDescription.textContent = "该区域只显示卡背与数量，交互不会揭示卡名、卡号或效果。";
+    return;
+  }
+  elements.cardDetailArt.className = "card-detail__art";
+  attachCardImage(elements.cardDetailArt, details.card_id, details.name);
+  elements.cardDetailName.textContent = details.name;
+  elements.cardDetailPasscode.textContent = `PASSCODE ${details.card_id} · ${formatType(details.type)}`;
+  const isMonster = (details.type & 0x1) !== 0;
+  elements.cardDetailStats.textContent = isMonster
+    ? `${attributes[details.attribute] || "未知属性"} · ${races[details.race] || "未知种族"} · Lv/Rank ${details.level} · ATK ${formatStat(details.attack)} / DEF ${formatStat(details.defense)}`
+    : `${sideLabel(card.controller)} · ${card.location_label} · ${card.position}`;
+  elements.cardDetailDescription.textContent = details.description || "无效果文本。";
+}
+
+function showCardPrompt() {
+  state.selectedCard = null;
+  elements.cardDetail.hidden = false;
+  elements.cardDetailArt.className = "card-detail__art card-detail__placeholder";
+  elements.cardDetailArt.replaceChildren(makeElement("span", "", "CARD"));
+  elements.cardDetailName.textContent = "选择一张卡牌";
+  elements.cardDetailPasscode.textContent = "右键场上卡牌，或点击左侧区域列表";
+  elements.cardDetailStats.textContent = "隐藏卡只显示其公开信息";
+  elements.cardDetailDescription.textContent = "卡牌详情不会改变题目状态，也不会执行任何对局动作。";
+  elements.cardDetailContext.textContent = "审阅模式";
+}
+
+function interactiveCard(card, {compact = false, board = false} = {}) {
+  const details = cardDetails(card);
+  const button = makeElement("button", `interactive-card${compact ? " interactive-card--compact" : ""}`);
+  button.type = "button";
+  button.dataset.uid = card.uid;
+  button.title = details ? `${details.name} · 点击或右键查看详情` : "隐藏卡牌";
+  const showFace = details && (!board || !card.face_down);
+  if (showFace) {
+    attachCardImage(button, details.card_id, details.name);
+  } else {
+    button.classList.add("card-back");
+    button.setAttribute("aria-label", "隐藏卡牌");
+  }
+  if (board && card.defense) button.classList.add("is-defense");
+  if (board && card.location === "LOCATION_MZONE") {
+    button.classList.add(card.controller === 0 ? "is-player-monster" : "is-opponent-monster");
+  }
+  const select = () => renderCardDetail(card);
+  button.addEventListener("click", select);
+  button.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+    select();
+  });
+  return button;
+}
+
+function cardsFor(field, controller, location) {
+  return field.cards.filter((card) => card.controller === controller && card.location === location);
+}
+
+function fieldCard(field, controller, location, sequence) {
+  return field.cards.find((card) =>
+    card.controller === controller && card.location === location && card.sequence === sequence
+  );
+}
+
+function zoneSlot(card, label) {
+  const slot = makeElement("div", "board-zone");
+  slot.append(card ? interactiveCard(card, {board: true}) : makeElement("span", "board-zone__label", label));
+  return slot;
+}
+
+function zoneRow(field, controller, location, prefix) {
+  const row = makeElement("div", "board-zone-row");
+  for (let sequence = 0; sequence < 5; sequence += 1) {
+    row.append(zoneSlot(fieldCard(field, controller, location, sequence), `${prefix}${sequence + 1}`));
+  }
+  return row;
+}
+
+function pileSummary(field, controller) {
+  const column = makeElement("div", "pile-summary");
+  [
+    ["LOCATION_DECK", "Deck"], ["LOCATION_GRAVE", "GY"],
+    ["LOCATION_REMOVED", "Ban"], ["LOCATION_EXTRA", "Extra"],
+  ].forEach(([location, label]) => {
+    const row = makeElement("div", "pile-summary__item");
+    row.append(makeElement("span", "", label), makeElement("strong", "", String(cardsFor(field, controller, location).length)));
+    column.append(row);
+  });
+  return column;
+}
+
+function fieldSide(field, controller) {
+  const wrapper = makeElement("div", `field-side field-side--${controller === 0 ? "player" : "opponent"}`);
+  const main = makeElement("div", "field-side__main");
+  if (controller === 1) {
+    main.append(zoneRow(field, controller, "LOCATION_SZONE", "S"));
+    main.append(zoneRow(field, controller, "LOCATION_MZONE", "M"));
+  } else {
+    main.append(zoneRow(field, controller, "LOCATION_MZONE", "M"));
+    main.append(zoneRow(field, controller, "LOCATION_SZONE", "S"));
+  }
+  wrapper.append(main, pileSummary(field, controller));
+  return wrapper;
+}
+
+function handStrip(field, controller) {
+  const wrapper = makeElement("div", `hand-strip hand-strip--${controller === 0 ? "player" : "opponent"}`);
+  const cards = cardsFor(field, controller, "LOCATION_HAND");
+  wrapper.append(makeElement("span", "hand-strip__label", `${sideLabel(controller)}手牌 ${cards.length}`));
+  const list = makeElement("div", "hand-strip__cards");
+  cards.forEach((card) => list.append(interactiveCard(card, {compact: true, board: true})));
+  wrapper.append(list);
+  return wrapper;
+}
+
+function renderDuelBoard(field) {
+  elements.duelBoard.replaceChildren();
+  const opponentBar = makeElement("div", "player-bar");
+  opponentBar.append(makeElement("span", "", field.ai_name || "Opponent"), makeElement("strong", "", `${field.life_points.opponent} LP`));
+  const playerBar = makeElement("div", "player-bar");
+  playerBar.append(makeElement("span", "", "Player 0"), makeElement("strong", "", `${field.life_points.player} LP`));
+  const emz = makeElement("div", "emz-row");
+  [5, 6].forEach((sequence, index) => {
+    const card = field.cards.find((candidate) =>
+      candidate.location === "LOCATION_MZONE" && candidate.sequence === sequence
+    );
+    const slot = zoneSlot(card, `EMZ ${index + 1}`);
+    slot.classList.add(index === 0 ? "emz-left" : "emz-right");
+    emz.append(slot);
+  });
+  const objective = makeElement("div", "board-objective", field.objective);
+  elements.duelBoard.append(
+    opponentBar,
+    handStrip(field, 1),
+    fieldSide(field, 1),
+    emz,
+    fieldSide(field, 0),
+    handStrip(field, 0),
+    playerBar,
+    objective,
+  );
+}
+
+function renderZoneBrowser(field) {
+  const groups = [
+    ["额外卡组", (card) => card.location === "LOCATION_EXTRA"],
+    ["墓地", (card) => card.location === "LOCATION_GRAVE"],
+    ["除外区", (card) => card.location === "LOCATION_REMOVED"],
+    ["盖放卡", (card) => card.face_down && ["LOCATION_MZONE", "LOCATION_SZONE"].includes(card.location)],
+  ];
+  elements.zoneGroups.replaceChildren(...groups.map(([label, predicate]) => {
+    const cards = field.cards.filter(predicate);
+    const section = makeElement("section", "zone-group");
+    const heading = makeElement("button", "zone-group__heading");
+    heading.type = "button";
+    heading.append(makeElement("strong", "", label), makeElement("span", "", String(cards.length)));
+    const list = makeElement("div", "zone-card-list");
+    cards.forEach((card) => {
+      const entry = makeElement("div", "zone-card-entry");
+      entry.append(interactiveCard(card, {compact: true}));
+      const details = cardDetails(card);
+      const text = makeElement("div", "zone-card-entry__text");
+      text.append(
+        makeElement("strong", "", details?.name || "隐藏卡牌"),
+        makeElement("span", "", `${sideLabel(card.controller)} · ${card.position}`),
+      );
+      entry.append(text);
+      list.append(entry);
+    });
+    if (!cards.length) list.append(makeElement("p", "zone-empty", "空"));
+    heading.addEventListener("click", () => section.classList.toggle("is-collapsed"));
+    section.append(heading, list);
+    return section;
+  }));
+  const materials = makeElement("section", "zone-group");
+  const materialHeading = makeElement("button", "zone-group__heading");
+  materialHeading.type = "button";
+  materialHeading.append(makeElement("strong", "", "超量素材"), makeElement("span", "", String(field.overlay.materials.length)));
+  const materialList = makeElement("div", "zone-card-list");
+  field.overlay.materials.forEach((card) => materialList.append(interactiveCard(card, {compact: true})));
+  if (!field.overlay.materials.length) materialList.append(makeElement("p", "zone-empty", "无已解析素材"));
+  if (field.overlay.unresolved_calls) {
+    materialList.append(makeElement("p", "zone-warning", `${field.overlay.unresolved_calls} 处动态 Overlay 调用尚未静态解析`));
+  }
+  materialHeading.addEventListener("click", () => materials.classList.toggle("is-collapsed"));
+  materials.append(materialHeading, materialList);
+  elements.zoneGroups.append(materials);
+}
+
+function renderInteractivePuzzle(item) {
+  elements.reviewImage.hidden = true;
+  elements.interactiveStage.hidden = false;
+  elements.zoneBrowser.hidden = false;
+  renderDuelBoard(item.interactive_state);
+  renderZoneBrowser(item.interactive_state);
+  showCardPrompt();
+}
 
 function reviewStatus(item) {
   return state.reviews[item.id]?.decision || "pending";
@@ -148,6 +425,10 @@ function renderItem() {
   if (!item) {
     elements.itemTitle.textContent = "没有符合筛选条件的题目";
     elements.reviewImage.removeAttribute("src");
+    elements.reviewImage.hidden = false;
+    elements.interactiveStage.hidden = true;
+    elements.zoneBrowser.hidden = true;
+    elements.cardDetail.hidden = true;
     elements.itemCategory.textContent = "-";
     elements.itemSubtitle.textContent = "-";
     elements.itemEnvironment.textContent = "-";
@@ -159,7 +440,15 @@ function renderItem() {
     return;
   }
   elements.itemTitle.textContent = item.title;
-  elements.reviewImage.src = item.image_url;
+  if (item.category === "puzzles" && item.interactive_state) {
+    renderInteractivePuzzle(item);
+  } else {
+    elements.reviewImage.hidden = false;
+    elements.reviewImage.src = item.image_url;
+    elements.interactiveStage.hidden = true;
+    elements.zoneBrowser.hidden = true;
+    elements.cardDetail.hidden = true;
+  }
   elements.itemCategory.textContent = `${item.category_label} · ${item.subtype}`;
   elements.itemSubtitle.textContent = item.subtitle;
   elements.itemEnvironment.textContent = `${item.regulation} · ${item.snapshot_id}`;
@@ -181,8 +470,9 @@ function renderItem() {
 
 function setZoom(value) {
   state.zoom = Math.max(.5, Math.min(2.5, value));
-  elements.reviewImage.style.width = `${state.zoom * 100}%`;
-  elements.reviewImage.style.maxWidth = state.zoom <= 1 ? "100%" : "none";
+  const target = elements.interactiveStage.hidden ? elements.reviewImage : elements.interactiveStage;
+  target.style.width = `${state.zoom * 100}%`;
+  target.style.maxWidth = state.zoom <= 1 ? "1100px" : "none";
 }
 
 async function saveReview() {
@@ -301,6 +591,7 @@ async function initialize() {
   const response = await fetch(state.config.catalog_url);
   if (!response.ok) throw new Error(`Catalog request failed: ${response.status}`);
   const catalog = await response.json();
+  state.catalog = catalog;
   state.items = catalog.items;
   state.reviews = state.config.storage_mode === "local" ? loadLocalReviews() : catalog.reviews;
   fillSelect(elements.categoryFilter, [

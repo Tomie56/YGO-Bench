@@ -8,10 +8,25 @@ from ygo_bench.visualization.public_site import make_static_catalog, validate_pu
 
 
 class PublicSiteTest(unittest.TestCase):
+    def test_reviewer_assets_include_interactive_card_inspection(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        html = (root / "ygo_bench/visualization/reviewer_assets/reviewer.html").read_text(
+            encoding="utf-8"
+        )
+        script = (root / "ygo_bench/visualization/reviewer_assets/reviewer.js").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn('id="zoneGroups"', html)
+        self.assertIn('id="cardDetail"', html)
+        self.assertIn('addEventListener("contextmenu"', script)
+        self.assertIn("超量素材", script)
+
     def test_static_catalog_removes_local_output_and_uses_relative_assets(self) -> None:
         source = {
             "dataset_version": "pilot-v1",
             "output_dir": "/private/output",
+            "card_image_source_dir": "/private/cards",
             "items": [
                 {
                     "id": "item-1",
@@ -24,6 +39,7 @@ class PublicSiteTest(unittest.TestCase):
         result = make_static_catalog(source)
 
         self.assertNotIn("output_dir", result)
+        self.assertNotIn("card_image_source_dir", result)
         self.assertEqual(result["reviews"], {})
         self.assertEqual(result["items"][0]["image_url"], "understanding/one.png")
         self.assertEqual(

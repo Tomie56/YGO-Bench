@@ -139,21 +139,23 @@ function showCardPrompt() {
   elements.cardDetailContext.textContent = "审阅模式";
 }
 
-function interactiveCard(card, {compact = false, board = false} = {}) {
+function interactiveCard(card, {compact = false, board = false, pile = false} = {}) {
   const details = cardDetails(card);
   const button = makeElement("button", `interactive-card${compact ? " interactive-card--compact" : ""}`);
   button.type = "button";
   button.dataset.uid = card.uid;
   button.title = details ? `${details.name} · 点击或右键查看详情` : "隐藏卡牌";
-  const showFace = details && (!board || !card.face_down);
+  const faceDownOnField = card.face_down && ["LOCATION_MZONE", "LOCATION_SZONE"].includes(card.location);
+  const showFace = details && (!board || !faceDownOnField);
   if (showFace) {
     attachCardImage(button, details.card_id, details.name);
   } else {
     button.classList.add("card-back");
     button.setAttribute("aria-label", "隐藏卡牌");
   }
-  if (board && card.defense) button.classList.add("is-defense");
-  if (board && card.location === "LOCATION_MZONE") {
+  if (board && !pile && card.defense) button.classList.add("is-defense");
+  if (pile) button.classList.add("interactive-card--pile");
+  if (board && !pile && card.location === "LOCATION_MZONE") {
     button.classList.add(card.controller === 0 ? "is-player-monster" : "is-opponent-monster");
   }
   const select = () => renderCardDetail(card);
@@ -195,8 +197,17 @@ function pileSummary(field, controller) {
     ["LOCATION_DECK", "Deck"], ["LOCATION_GRAVE", "GY"],
     ["LOCATION_REMOVED", "Ban"], ["LOCATION_EXTRA", "Extra"],
   ].forEach(([location, label]) => {
+    const cards = cardsFor(field, controller, location);
+    const topCard = cards.at(-1);
     const row = makeElement("div", "pile-summary__item");
-    row.append(makeElement("span", "", label), makeElement("strong", "", String(cardsFor(field, controller, location).length)));
+    const slot = topCard
+      ? interactiveCard(topCard, {board: true, pile: true})
+      : makeElement("div", "pile-card--empty");
+    row.append(
+      slot,
+      makeElement("span", "pile-summary__label", label),
+      makeElement("strong", "pile-summary__count", String(cards.length)),
+    );
     column.append(row);
   });
   return column;
@@ -470,9 +481,14 @@ function renderItem() {
 
 function setZoom(value) {
   state.zoom = Math.max(.5, Math.min(2.5, value));
-  const target = elements.interactiveStage.hidden ? elements.reviewImage : elements.interactiveStage;
-  target.style.width = `${state.zoom * 100}%`;
-  target.style.maxWidth = state.zoom <= 1 ? "1100px" : "none";
+  if (elements.interactiveStage.hidden) {
+    elements.reviewImage.style.width = `${state.zoom * 100}%`;
+    elements.reviewImage.style.maxWidth = state.zoom <= 1 ? "100%" : "none";
+    return;
+  }
+  elements.interactiveStage.style.width = "100%";
+  elements.interactiveStage.style.maxWidth = "1100px";
+  elements.interactiveStage.style.zoom = String(state.zoom);
 }
 
 async function saveReview() {

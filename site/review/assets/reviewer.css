@@ -118,13 +118,17 @@ textarea { padding: 9px; resize: vertical; line-height: 1.45; }
 .board-zone-row, .emz-row { display: grid; grid-template-columns: repeat(5, 134px); gap: 12px; }
 .board-zone { position: relative; display: flex; align-items: center; justify-content: center; width: 134px; height: 134px; border: 1px solid #7b978c88; background: #173f37aa; }
 .board-zone__label { color: #8db9aa; font-size: 10px; font-weight: 700; }
-.emz-row { margin: 7px auto; }
+.emz-row { width: 814px; margin: 7px auto; }
 .emz-row .board-zone { background: #19483f; border-color: #91ad9f99; }
 .emz-left { grid-column: 2; }
 .emz-right { grid-column: 4; }
-.pile-summary { display: grid; gap: 7px; }
-.pile-summary__item { display: flex; justify-content: space-between; align-items: center; height: 29px; padding: 0 7px; color: #b9d0c7; background: #12332c; border: 1px solid #668277; font-size: 9px; }
-.pile-summary__item strong { color: #ffd363; font-size: 12px; }
+.pile-summary { display: grid; gap: 3px; }
+.pile-summary__item { position: relative; display: flex; align-items: center; justify-content: center; width: 82px; height: 66px; color: #dce9e4; background: #102f29; border: 1px solid #668277; }
+.pile-summary__label, .pile-summary__count { position: absolute; z-index: 2; padding: 2px 4px; color: #f1f6f4; background: #0a211ddd; font-size: 8px; line-height: 1; pointer-events: none; }
+.pile-summary__label { top: 2px; left: 2px; }
+.pile-summary__count { right: 2px; bottom: 2px; color: #ffd363; font-size: 10px; }
+.pile-card--empty { width: 45px; height: 66px; }
+.pile-card--empty { background: #163b33; border: 1px solid #6c887d88; }
 .hand-strip { display: flex; align-items: center; gap: 9px; min-height: 75px; padding: 4px 10px; }
 .hand-strip--opponent { justify-content: flex-start; }
 .hand-strip--player { justify-content: flex-end; }
@@ -138,6 +142,7 @@ textarea { padding: 9px; resize: vertical; line-height: 1.45; }
 .interactive-card:hover, .interactive-card:focus-visible { z-index: 4; outline: 3px solid #ffd363; outline-offset: 2px; }
 .interactive-card img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .interactive-card--compact { width: 50px; height: 73px; }
+.pile-summary__item .interactive-card--pile { width: 45px; height: 66px; border-width: 1px; box-shadow: none; }
 .interactive-card.is-defense { transform: rotate(90deg); }
 .interactive-card.is-player-monster { border: 3px solid #318bd0; }
 .interactive-card.is-opponent-monster { border: 3px solid #d34c43; }

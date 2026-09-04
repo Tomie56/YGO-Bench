@@ -16,11 +16,18 @@ class PublicSiteTest(unittest.TestCase):
         script = (root / "ygo_bench/visualization/reviewer_assets/reviewer.js").read_text(
             encoding="utf-8"
         )
+        stylesheet = (root / "ygo_bench/visualization/reviewer_assets/reviewer.css").read_text(
+            encoding="utf-8"
+        )
 
         self.assertIn('id="zoneGroups"', html)
         self.assertIn('id="cardDetail"', html)
         self.assertIn('addEventListener("contextmenu"', script)
         self.assertIn("超量素材", script)
+        self.assertIn("faceDownOnField", script)
+        self.assertIn("interactive-card--pile", script)
+        self.assertIn("style.zoom", script)
+        self.assertIn(".emz-row { width: 814px", stylesheet)
 
     def test_static_catalog_removes_local_output_and_uses_relative_assets(self) -> None:
         source = {

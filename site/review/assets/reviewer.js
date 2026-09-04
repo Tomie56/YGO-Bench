@@ -10,6 +10,8 @@ const state = {
   decision: null,
   zoom: 1,
   selectedCard: null,
+  zoneCatalog: [],
+  activeZoneKey: null,
 };
 
 const elements = Object.fromEntries([
@@ -19,7 +21,7 @@ const elements = Object.fromEntries([
   "itemSubtitle", "itemEnvironment", "itemSource", "itemCore", "itemIssues",
   "reviewNote", "saveReviewButton", "saveStatus", "progressText", "progressBar",
   "storageNotice", "importButton", "exportButton", "importInput", "zoneBrowser",
-  "zoneGroups", "interactiveStage", "duelBoard", "cardDetail", "cardDetailArt",
+  "zoneGroups", "imageStage", "interactiveStage", "duelBoard", "cardDetail", "cardDetailArt",
   "cardDetailName", "cardDetailPasscode", "cardDetailStats",
   "cardDetailDescription", "cardDetailContext",
 ].map((id) => [id, document.getElementById(id)]));
@@ -133,13 +135,13 @@ function showCardPrompt() {
   elements.cardDetailArt.className = "card-detail__art card-detail__placeholder";
   elements.cardDetailArt.replaceChildren(makeElement("span", "", "CARD"));
   elements.cardDetailName.textContent = "选择一张卡牌";
-  elements.cardDetailPasscode.textContent = "右键场上卡牌，或点击左侧区域列表";
+  elements.cardDetailPasscode.textContent = "右键场上卡牌，或点击下方区域列表";
   elements.cardDetailStats.textContent = "隐藏卡只显示其公开信息";
   elements.cardDetailDescription.textContent = "卡牌详情不会改变题目状态，也不会执行任何对局动作。";
   elements.cardDetailContext.textContent = "审阅模式";
 }
 
-function interactiveCard(card, {compact = false, board = false, pile = false} = {}) {
+function interactiveCard(card, {compact = false, board = false, pile = false, onSelect = null} = {}) {
   const details = cardDetails(card);
   const button = makeElement("button", `interactive-card${compact ? " interactive-card--compact" : ""}`);
   button.type = "button";
@@ -158,7 +160,7 @@ function interactiveCard(card, {compact = false, board = false, pile = false} = 
   if (board && !pile && card.location === "LOCATION_MZONE") {
     button.classList.add(card.controller === 0 ? "is-player-monster" : "is-opponent-monster");
   }
-  const select = () => renderCardDetail(card);
+  const select = () => onSelect ? onSelect(card) : renderCardDetail(card);
   button.addEventListener("click", select);
   button.addEventListener("contextmenu", (event) => {
     event.preventDefault();
@@ -175,6 +177,10 @@ function fieldCard(field, controller, location, sequence) {
   return field.cards.find((card) =>
     card.controller === controller && card.location === location && card.sequence === sequence
   );
+}
+
+function zoneKey(controller, location) {
+  return `${controller}:${location}`;
 }
 
 function zoneSlot(card, label) {
@@ -200,14 +206,27 @@ function pileSummary(field, controller) {
     const cards = cardsFor(field, controller, location);
     const topCard = cards.at(-1);
     const row = makeElement("div", "pile-summary__item");
+    const key = zoneKey(controller, location);
+    const focusPile = () => focusZoneBrowser(key, true);
+    row.dataset.zoneKey = key;
+    row.tabIndex = 0;
+    row.setAttribute("role", "button");
+    row.setAttribute("aria-label", `${sideLabel(controller)} ${label}，${cards.length} 张`);
     const slot = topCard
-      ? interactiveCard(topCard, {board: true, pile: true})
+      ? interactiveCard(topCard, {board: true, pile: true, onSelect: focusPile})
       : makeElement("div", "pile-card--empty");
     row.append(
       slot,
       makeElement("span", "pile-summary__label", label),
       makeElement("strong", "pile-summary__count", String(cards.length)),
     );
+    row.addEventListener("click", focusPile);
+    row.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        focusPile();
+      }
+    });
     column.append(row);
   });
   return column;
@@ -265,50 +284,92 @@ function renderDuelBoard(field) {
   );
 }
 
-function renderZoneBrowser(field) {
-  const groups = [
-    ["额外卡组", (card) => card.location === "LOCATION_EXTRA"],
-    ["墓地", (card) => card.location === "LOCATION_GRAVE"],
-    ["除外区", (card) => card.location === "LOCATION_REMOVED"],
-    ["盖放卡", (card) => card.face_down && ["LOCATION_MZONE", "LOCATION_SZONE"].includes(card.location)],
-  ];
-  elements.zoneGroups.replaceChildren(...groups.map(([label, predicate]) => {
-    const cards = field.cards.filter(predicate);
-    const section = makeElement("section", "zone-group");
-    const heading = makeElement("button", "zone-group__heading");
-    heading.type = "button";
-    heading.append(makeElement("strong", "", label), makeElement("span", "", String(cards.length)));
-    const list = makeElement("div", "zone-card-list");
-    cards.forEach((card) => {
-      const entry = makeElement("div", "zone-card-entry");
-      entry.append(interactiveCard(card, {compact: true}));
-      const details = cardDetails(card);
-      const text = makeElement("div", "zone-card-entry__text");
-      text.append(
-        makeElement("strong", "", details?.name || "隐藏卡牌"),
-        makeElement("span", "", `${sideLabel(card.controller)} · ${card.position}`),
-      );
-      entry.append(text);
-      list.append(entry);
-    });
-    if (!cards.length) list.append(makeElement("p", "zone-empty", "空"));
-    heading.addEventListener("click", () => section.classList.toggle("is-collapsed"));
-    section.append(heading, list);
-    return section;
-  }));
-  const materials = makeElement("section", "zone-group");
-  const materialHeading = makeElement("button", "zone-group__heading");
-  materialHeading.type = "button";
-  materialHeading.append(makeElement("strong", "", "超量素材"), makeElement("span", "", String(field.overlay.materials.length)));
-  const materialList = makeElement("div", "zone-card-list");
-  field.overlay.materials.forEach((card) => materialList.append(interactiveCard(card, {compact: true})));
-  if (!field.overlay.materials.length) materialList.append(makeElement("p", "zone-empty", "无已解析素材"));
-  if (field.overlay.unresolved_calls) {
-    materialList.append(makeElement("p", "zone-warning", `${field.overlay.unresolved_calls} 处动态 Overlay 调用尚未静态解析`));
+function renderZonePanel(group) {
+  const panel = elements.zoneGroups.querySelector(".zone-panel");
+  panel.replaceChildren();
+  const heading = makeElement("div", "zone-panel__heading");
+  heading.append(makeElement("strong", "", group.label), makeElement("span", "", `${group.cards.length} 张`));
+  const list = makeElement("div", "zone-card-list");
+  group.cards.forEach((card, index) => {
+    const entry = makeElement("div", "zone-card-entry");
+    entry.append(interactiveCard(card, {
+      compact: true,
+      onSelect: () => renderCardDetail(card, `${group.label} · 第 ${index + 1} 张`),
+    }));
+    const details = cardDetails(card);
+    const text = makeElement("div", "zone-card-entry__text");
+    text.append(
+      makeElement("strong", "", details?.name || "隐藏卡牌"),
+      makeElement("span", "", `第 ${index + 1} 张 · ${card.position}`),
+    );
+    entry.append(text);
+    list.append(entry);
+  });
+  if (!group.cards.length) list.append(makeElement("p", "zone-empty", "该区域为空"));
+  if (group.warning) list.append(makeElement("p", "zone-warning", group.warning));
+  panel.append(heading, list);
+}
+
+function focusZoneBrowser(key, reveal = false) {
+  const group = state.zoneCatalog.find((candidate) => candidate.key === key);
+  if (!group) return;
+  state.activeZoneKey = key;
+  elements.zoneGroups.querySelectorAll(".zone-tab").forEach((tab) => {
+    const active = tab.dataset.zoneKey === key;
+    tab.classList.toggle("is-active", active);
+    tab.setAttribute("aria-selected", String(active));
+  });
+  document.querySelectorAll(".pile-summary__item").forEach((pile) => {
+    pile.classList.toggle("is-active", pile.dataset.zoneKey === key);
+  });
+  renderZonePanel(group);
+  if (reveal) {
+    elements.imageStage.scrollTo({top: elements.zoneBrowser.offsetTop - 8, behavior: "smooth"});
   }
-  materialHeading.addEventListener("click", () => materials.classList.toggle("is-collapsed"));
-  materials.append(materialHeading, materialList);
-  elements.zoneGroups.append(materials);
+}
+
+function renderZoneBrowser(field) {
+  const pileSpecs = [
+    ["LOCATION_DECK", "Deck"], ["LOCATION_GRAVE", "GY"],
+    ["LOCATION_REMOVED", "Ban"], ["LOCATION_EXTRA", "Extra"],
+  ];
+  state.zoneCatalog = [0, 1].flatMap((controller) => pileSpecs.map(([location, label]) => ({
+    key: zoneKey(controller, location),
+    label: `${sideLabel(controller)} ${label}`,
+    cards: cardsFor(field, controller, location),
+  })));
+  state.zoneCatalog.push({
+    key: "all:SET",
+    label: "场上盖放卡",
+    cards: field.cards.filter((card) =>
+      card.face_down && ["LOCATION_MZONE", "LOCATION_SZONE"].includes(card.location)
+    ),
+  });
+  state.zoneCatalog.push({
+    key: "all:OVERLAY",
+    label: "超量素材",
+    cards: field.overlay.materials,
+    warning: field.overlay.unresolved_calls
+      ? `${field.overlay.unresolved_calls} 处动态 Overlay 调用尚未静态解析`
+      : "",
+  });
+
+  const tabs = makeElement("div", "zone-tabs");
+  tabs.setAttribute("role", "tablist");
+  state.zoneCatalog.forEach((group) => {
+    const tab = makeElement("button", "zone-tab");
+    tab.type = "button";
+    tab.dataset.zoneKey = group.key;
+    tab.setAttribute("role", "tab");
+    tab.append(makeElement("span", "", group.label), makeElement("strong", "", String(group.cards.length)));
+    tab.addEventListener("click", () => focusZoneBrowser(group.key, true));
+    tabs.append(tab);
+  });
+  elements.zoneGroups.replaceChildren(tabs, makeElement("section", "zone-panel"));
+  const preferred = state.zoneCatalog.find((group) => group.key === state.activeZoneKey)
+    || state.zoneCatalog.find((group) => group.cards.length)
+    || state.zoneCatalog[0];
+  focusZoneBrowser(preferred.key);
 }
 
 function renderInteractivePuzzle(item) {

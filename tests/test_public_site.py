@@ -22,8 +22,11 @@ class PublicSiteTest(unittest.TestCase):
 
         self.assertIn('id="zoneGroups"', html)
         self.assertIn('id="cardDetail"', html)
+        self.assertIn('class="duel-tools"', html)
         self.assertIn('addEventListener("contextmenu"', script)
         self.assertIn("超量素材", script)
+        self.assertIn("focusZoneBrowser", script)
+        self.assertIn("zoneCatalog", script)
         self.assertIn("faceDownOnField", script)
         self.assertIn("interactive-card--pile", script)
         self.assertIn("style.zoom", script)

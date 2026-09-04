@@ -25,13 +25,13 @@
     },
     {
       "path": "review/assets/reviewer.css",
-      "size": 15210,
-      "sha256": "2698c65bd752ea35b847b0cda4e8415c7e54b8192d97984e0fe15576ea0f44a3"
+      "size": 16164,
+      "sha256": "7f283e6d61ef4a4259e07d44e7c8446f9bb6eebbeb63d51fa129b1936532dd80"
     },
     {
       "path": "review/assets/reviewer.js",
-      "size": 26082,
-      "sha256": "16b1f5a3669742cc3c352c04a9ebdc89daad6a831be1e92d070cd4e8f98deaa7"
+      "size": 27851,
+      "sha256": "064b58dc16ce7311965a713199aa535eb0d905107343b3ec16a800029d779d79"
     },
     {
       "path": "review/card-images/10002346.jpg",
@@ -3340,8 +3340,8 @@
     },
     {
       "path": "review/index.html",
-      "size": 4993,
-      "sha256": "3f416f6671f9eef8b06c2398f7c844fbb416de61c331010ffeb45d638a380196"
+      "size": 5183,
+      "sha256": "21baeea5eeca399a7e5a1ea6ef37b535a626c519e522bfa05183674219ecef35"
     },
     {
       "path": "review/puzzles/01-Naim-DuelLinks-DuelistsChallenges-2-until-08-Feb-2020.png",

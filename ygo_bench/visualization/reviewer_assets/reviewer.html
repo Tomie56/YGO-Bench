@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>YGO-Bench 人工审阅</title>
-  <link rel="stylesheet" href="assets/reviewer.css?v=20260905-2" />
+  <link rel="stylesheet" href="assets/reviewer.css?v=20260905-3" />
 </head>
 <body>
   <header class="app-header">
@@ -36,13 +36,6 @@
       </select></label>
       <label class="check"><input id="issuesOnly" type="checkbox" />只看资产 / 资格问题</label>
       <div class="asset-summary" id="assetSummary"></div>
-      <section class="zone-browser" id="zoneBrowser" hidden>
-        <div class="zone-browser__header">
-          <h2>场面区域</h2>
-          <span>点击卡面查看详情</span>
-        </div>
-        <div class="zone-groups" id="zoneGroups"></div>
-      </section>
       <h2 class="question-list-title">题目列表</h2>
       <div class="thumb-list" id="thumbList"></div>
     </aside>
@@ -63,26 +56,35 @@
         <img id="reviewImage" alt="当前题目的审阅图" />
         <section class="interactive-stage" id="interactiveStage" hidden aria-label="可交互对局场面">
           <div class="duel-board" id="duelBoard"></div>
+          <div class="duel-tools">
+            <section class="zone-browser" id="zoneBrowser" hidden>
+              <div class="zone-browser__header">
+                <h2>场面区域</h2>
+                <span>选择区域查看整堆卡牌</span>
+              </div>
+              <div class="zone-groups" id="zoneGroups"></div>
+            </section>
+            <section class="card-detail" id="cardDetail" hidden>
+              <div class="card-detail__heading">
+                <p>卡牌详情</p>
+                <span id="cardDetailContext">-</span>
+              </div>
+              <div class="card-detail__body">
+                <div class="card-detail__art" id="cardDetailArt"></div>
+                <div>
+                  <h2 id="cardDetailName">-</h2>
+                  <p class="card-detail__passcode" id="cardDetailPasscode">-</p>
+                  <p class="card-detail__stats" id="cardDetailStats">-</p>
+                </div>
+              </div>
+              <p class="card-detail__description" id="cardDetailDescription">-</p>
+            </section>
+          </div>
         </section>
       </div>
     </section>
 
     <aside class="inspector">
-      <section class="card-detail" id="cardDetail" hidden>
-        <div class="card-detail__heading">
-          <p>卡牌详情</p>
-          <span id="cardDetailContext">-</span>
-        </div>
-        <div class="card-detail__body">
-          <div class="card-detail__art" id="cardDetailArt"></div>
-          <div>
-            <h2 id="cardDetailName">-</h2>
-            <p class="card-detail__passcode" id="cardDetailPasscode">-</p>
-            <p class="card-detail__stats" id="cardDetailStats">-</p>
-          </div>
-        </div>
-        <p class="card-detail__description" id="cardDetailDescription">-</p>
-      </section>
       <p class="category" id="itemCategory">-</p>
       <h2 id="itemSubtitle">-</h2>
       <dl>
@@ -116,6 +118,6 @@
       </section>
     </aside>
   </main>
-  <script src="assets/reviewer.js?v=20260905-2"></script>
+  <script src="assets/reviewer.js?v=20260905-3"></script>
 </body>
 </html>
